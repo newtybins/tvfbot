@@ -16,7 +16,7 @@
         "chart.js": "^2.9.3",
         "chartjs-node-canvas": "^3.0.6",
         "common-tags": "^1.8.0",
-        "cross-env": "^7.0.0",
+        "cross-env": "^7.0.2",
         "discord.js": "discordjs/discord.js",
         "dotenv": "^8.2.0",
         "imgur-uploader": "^4.2.1",
