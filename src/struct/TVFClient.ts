@@ -2,34 +2,23 @@ import * as Discord from 'discord.js';
 import * as winston from 'winston';
 import logdnaWinston from 'logdna-winston';
 import { PastebinClient } from '@catte_/pastebin.js';
-import * as path from 'path';	
 import moment from 'moment';
 import si from 'systeminformation';
-import {
-	AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler,
-} from 'discord-akairo';
+import { SapphireClient } from '@sapphire/framework';
 import Constants from '../Constants';
 import TVFRoles from '../TVFRoles';
 import TVFChannels from '../TVFChannels';
-import TVFSocial from './TVFSocial';
-import TVFUtils from './TVFUtils';
 import { PrismaClient } from '@prisma/client';
 
-export default class TVFClient extends AkairoClient {
+export default class TVFClient extends SapphireClient {
 	production = process.env.NODE_ENV === 'production';
-	logger: Logger;
+	botLogger: Logger;
 	server: Discord.Guild;
-	commands: CommandHandler;
-	listenerHandler: ListenerHandler;
-	inhibitors: InhibitorHandler;
 	pastebin: PastebinClient;
 	constants: typeof Constants;
 	tvfRoles: ReturnType<typeof TVFRoles>;
     tvfChannels: ReturnType<typeof TVFChannels>;
 	db: PrismaClient;
-	social: TVFSocial;
-	utils: TVFUtils;
-	prefix = this.production ? 'tvf ' : 'tvf beta ';
 	botBanner = true;
 
 	/**
@@ -37,9 +26,9 @@ export default class TVFClient extends AkairoClient {
 	 * @param constants The constants for the bot to use
 	 */
 	constructor(constants: typeof Constants) {
-		super({ ownerID: ['326767126406889473'] }, {
+		super({
 			disableMentions: 'everyone', 
-			ws: { 
+			ws: {
 				intents: [ 
 					'GUILDS', 
 					'GUILD_MEMBERS',
@@ -48,7 +37,7 @@ export default class TVFClient extends AkairoClient {
 					'GUILD_MESSAGES', 
 					'GUILD_VOICE_STATES', 
 					'DIRECT_MESSAGES'
-				] 
+				]
 			},
 			presence: {
 				activity: {
@@ -56,7 +45,11 @@ export default class TVFClient extends AkairoClient {
 					type: 'WATCHING'
 				},
 				status: 'idle'
-			}
+			},
+			caseInsensitiveCommands: true,
+			caseInsensitivePrefixes: true,
+			defaultPrefix: process.env.NODE_ENV === 'production' ? 'tvf ' : 'tvf beta ',
+			loadDefaultErrorEvents: false
 		});
 
 		this.constants = constants;
@@ -103,86 +96,27 @@ export default class TVFClient extends AkairoClient {
 		}) as Logger;
 
 		// Update class properties
-		this.logger = logger;
+		this.botLogger = logger;
 		this.db = new PrismaClient();
-		this.utils = new TVFUtils(this);
-		this.social = new TVFSocial(this);
 
 		// Error events
-		this.on('debug', (m) => this.logger.debug(m));
-		this.on('warn', (m) => this.logger.warn(m));
-		this.on('error', (m) => this.logger.error(m));
-		process.on('uncaughtException', (m) => this.logger.error(m));
-
-		// Set up Akairo listeners
-		this.commands = new CommandHandler(this, {
-			directory: path.join(__dirname, '..', 'commands'),
-			prefix: this.prefix,
-			commandUtil: true,
-			storeMessages: true,
-			argumentDefaults: {
-				prompt: {
-					modifyStart: (msg: Discord.Message, text: string) => `${msg.author}, ${text}\nType cancel to cancel this command!`,
-					timeout: (msg: Discord.Message) => {
-						this.utils.deletePrompts(msg);
-						return 'Time ran out, command has been cancelled!';
-					},
-					ended: (msg: Discord.Message) => {
-						this.utils.deletePrompts(msg);
-						return 'Too many retries, command has been cancelled!';
-					},
-					cancel: (msg: Discord.Message) => {
-						this.utils.deletePrompts(msg);
-						return 'Command cancelled!';
-					},
-					retries: 4,
-					time: 30000
-				}
-			},
-			aliasReplacement: /-/g,
-			allowMention: true,
-			defaultCooldown: 1000,
-			ignoreCooldown: this.ownerID,
-			automateCategories: true,
-		});
-
-		this.commands.loadAll();
-		this.logger.info('Commands loaded!');
-
-		this.inhibitors = new InhibitorHandler(this, {
-			directory: path.join(__dirname, '..', 'inhibitors'),
-		});
-
-		this.commands.useInhibitorHandler(this.inhibitors);
-		this.inhibitors.loadAll();
-		this.logger.info('Inhibitors bound to command handler and loaded!');
-
-		this.listenerHandler = new ListenerHandler(this, {
-			directory: path.join(__dirname, '..', 'listeners'),
-		});
-
-		this.listenerHandler.setEmitters({
-			commands: this.commands,
-			inhibitors: this.inhibitors,
-			listenerHandler: this.listenerHandler
-		});
-
-		this.commands.useListenerHandler(this.listenerHandler);
-		this.listenerHandler.loadAll();
-		this.logger.info('Listeners bound to command handler and loaded!');
+		this.on('debug', (m) => this.botLogger.debug(m));
+		this.on('warn', (m) => this.botLogger.warn(m));
+		this.on('error', (m) => this.botLogger.error(m));
+		process.on('uncaughtException', (m) => this.botLogger.error(m));
 
 		// Log into pastebin
 		this.pastebin = new PastebinClient(process.env.PASTEBIN_KEY, process.env.PASTEBIN_USERNAME, process.env.PASTEBIN_PASSWORD)
 		await this.pastebin.login();
-		this.logger.info('Logged into Pastebin!');
+		this.botLogger.info('Logged into Pastebin!');
 
 		// Log into discord
 		await this.login(this.production ? process.env.STABLE : process.env.BETA);
-		this.logger.info('Logged into Discord!');
+		this.botLogger.info('Logged into Discord!');
 
 		// Save the server for use in other methods
 		this.server = this.guilds.cache.get('435894444101861408');
-		this.logger.info('Saved server to Client!');
+		this.botLogger.info('Saved server to Client!');
 	}
 
 	/**

@@ -1,37 +1,32 @@
 import { stripIndents } from 'common-tags';
-import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { CommandOptions, Command } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { Message, MessageEmbed } from 'discord.js';
 
-class Ping extends Command {
-	constructor() {
-		super('ping', {
-			aliases: ['ping'],
-			category: 'Core',
-			description: 'Checks the latency between me and Discord!'
-		});
-
-		this.usage = 'ping';
-		this.examples = ['ping'];
-	}
-
-	exec(msg: Message) {
-		const embed = this.client.utils.embed()
+@ApplyOptions<CommandOptions>({
+	aliases: ['pong'],
+	description: 'Checks my latency!'
+})
+export default class Ping extends Command {
+	async run(msg: Message) {
+		// Create the embed
+		const embed = new MessageEmbed()
 			.setTitle('pong <3')
-			.setColor(this.client.constants.colours.green)
+			.setColor(this.context.client.constants.colours.green)
 			.setThumbnail(msg.guild.iconURL())
 			.setAuthor(msg.author.username, msg.author.avatarURL())
 			.setDescription('Calculating ping...');
+		
+		// Work out the ping
+		const resultMsg = await msg.channel.send(embed);
+		const ping = resultMsg.createdTimestamp - msg.createdTimestamp;
 
-		msg.channel.send(embed).then((resultMsg) => {
-			const ping = resultMsg.createdTimestamp - msg.createdTimestamp;
-			embed.setDescription(stripIndents`
-                Bot Latency: ${ping}ms
-                API Latency: ${this.client.ws.ping}ms
-            `);
-			resultMsg.edit(embed);
-		});
+		// Update the embed
+		embed.setDescription(stripIndents`
+            Bot Latency: ${ping}ms
+            API Latency: ${this.context.client.ws.ping}ms
+        `);
+
+		await resultMsg.edit(embed);
 	}
 }
-
-module.exports = Ping;
-export default Ping;
