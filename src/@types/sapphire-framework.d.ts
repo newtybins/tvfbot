@@ -4,7 +4,8 @@ import TVFConstants from '../Constants';
 import TVFRoles from '../TVFRoles';
 import TVFChannels from '../TVFChannels';
 import { PrismaClient } from '@prisma/client';
-import { ILogger } from '@sapphire/framework';
+import { AliasStore } from '@sapphire/framework';
+import TVFCommand from '../struct/TVFCommand';
 
 declare module '@sapphire/framework' {
 	interface SapphireClient {
@@ -20,5 +21,9 @@ declare module '@sapphire/framework' {
 		botBanner: boolean;
 
 		userLogCompiler(u: Discord.User): string;
+	}
+
+	interface Command {
+		category: string;
 	}
 }

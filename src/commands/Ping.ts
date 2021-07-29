@@ -1,13 +1,14 @@
 import { stripIndents } from 'common-tags';
-import { CommandOptions, Command } from '@sapphire/framework';
+import { CommandOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Message, MessageEmbed } from 'discord.js';
+import TVFCommand from '../struct/TVFCommand';
 
 @ApplyOptions<CommandOptions>({
 	aliases: ['pong'],
 	description: 'Checks my latency!'
 })
-export default class Ping extends Command {
+export default class Ping extends TVFCommand {
 	async run(msg: Message) {
 		// Create the embed
 		const embed = new MessageEmbed()
