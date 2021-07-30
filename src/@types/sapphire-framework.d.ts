@@ -6,6 +6,7 @@ import TVFChannels from '../TVFChannels';
 import { PrismaClient } from '@prisma/client';
 import { AliasStore } from '@sapphire/framework';
 import TVFCommand from '../struct/TVFCommand';
+import TVFUtils from '../struct/TVFUtils';
 
 declare module '@sapphire/framework' {
 	interface SapphireClient {
@@ -14,6 +15,7 @@ declare module '@sapphire/framework' {
 		pastebin: PastebinClient;
 		botLogger: Logger;
 		constants: typeof TVFConstants;
+		utils: TVFUtils;
 		tvfRoles: ReturnType<typeof TVFRoles>;
 		tvfChannels: ReturnType<typeof TVFChannels>;
 		db: PrismaClient;
@@ -25,5 +27,10 @@ declare module '@sapphire/framework' {
 
 	interface Command {
 		category: string;
+	}
+
+	interface CommandOptions {
+		permissions?: Discord.PermissionResolvable[];
+		cooldown?: number;
 	}
 }

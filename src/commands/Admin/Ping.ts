@@ -2,11 +2,12 @@ import { stripIndents } from 'common-tags';
 import { CommandOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Message, MessageEmbed } from 'discord.js';
-import TVFCommand from '../struct/TVFCommand';
+import TVFCommand from '../../struct/TVFCommand';
 
 @ApplyOptions<CommandOptions>({
 	aliases: ['pong'],
-	description: 'Checks my latency!'
+	description: 'Checks my latency!',
+	preconditions: ['admin']
 })
 export default class Ping extends TVFCommand {
 	async run(msg: Message) {

@@ -1,6 +1,6 @@
 import { CommandOptions, Args, CommandStore } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Message, MessageEmbed, APIMessage, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import TVFCommand from '../struct/TVFCommand';
 import * as Pagination from 'discord-paginationembed';
 
@@ -37,6 +37,7 @@ export default class Help extends TVFCommand {
 	private async menu(msg: Message) {
 		const categories = new Set<string>();
 		this._commands = this.context.client.stores.get('commands');
+		console.log(this._commands.values())
 
 		for (const [, command] of this._commands.filter(cmd => cmd.category.toLowerCase() !== 'admin')) {
 			categories.add(command.category);

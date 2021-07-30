@@ -1,4 +1,4 @@
-import { Command, CommandOptions, PieceContext } from '@sapphire/framework';
+import { Command, CommandOptions, PieceContext, PreconditionEntryResolvable, PermissionsPrecondition } from '@sapphire/framework';
 import path from 'path';
 
 export default abstract class TVFCommand extends Command {
@@ -9,6 +9,11 @@ export default abstract class TVFCommand extends Command {
 
 		const paths = context.path.split(path.sep);
 		this.fullCategory = paths.slice(paths.indexOf('commands') + 1, -1);
+
+		// Preconditions
+		if (!options.preconditions) options.preconditions = [];
+		if (options.cooldown) (options.preconditions as PreconditionEntryResolvable[]).push({ name: 'Cooldown', context: { delay: options.cooldown * 1000 } });
+        if (options.permissions) (options.preconditions as PreconditionEntryResolvable[]).push(new PermissionsPrecondition(options.permissions));
 	}
 
 	public get category() {

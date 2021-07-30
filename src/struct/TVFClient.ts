@@ -9,12 +9,14 @@ import Constants from '../Constants';
 import TVFRoles from '../TVFRoles';
 import TVFChannels from '../TVFChannels';
 import { PrismaClient } from '@prisma/client';
+import TVFUtils from './TVFUtils';
 
 export default class TVFClient extends SapphireClient {
 	production = process.env.NODE_ENV === 'production';
 	botLogger: Logger;
 	server: Discord.Guild;
 	pastebin: PastebinClient;
+	utils: TVFUtils;
 	constants: typeof Constants;
 	tvfRoles: ReturnType<typeof TVFRoles>;
     tvfChannels: ReturnType<typeof TVFChannels>;
@@ -97,6 +99,7 @@ export default class TVFClient extends SapphireClient {
 
 		// Update class properties
 		this.botLogger = logger;
+		this.utils = new TVFUtils(this);
 		this.db = new PrismaClient();
 
 		// Error events
