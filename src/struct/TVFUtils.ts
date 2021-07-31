@@ -21,10 +21,10 @@ export default class TVFUtils {
 	 * @param {Discord.GuildMember} member
 	 */
 	isUser(role: StaffRole, member: GuildMember): boolean {
-		return role === 'Support' ? member.roles.cache.has(this.client.tvfRoles.staff.support.id) || member.roles.cache.has(this.client.tvfRoles.staff.supportHead.id) || member.roles.cache.has(this.client.tvfRoles.staff.admins.id)
-			: role === 'Moderation' ? member.roles.cache.has(this.client.tvfRoles.staff.moderators.id) || member.roles.cache.has(this.client.tvfRoles.staff.modHead.id) || member.roles.cache.has(this.client.tvfRoles.staff.admins.id)
-				: role === 'Admin' ? member.roles.cache.has(this.client.tvfRoles.staff.admins.id)
-					: role === 'Staff' ? member.roles.cache.has(this.client.tvfRoles.staff.staff.id)
+		return role === 'Support' ? member.roles.cache.has(this.client.tvfRoles.support.id) || member.roles.cache.has(this.client.tvfRoles.supportHead.id) || member.roles.cache.has(this.client.tvfRoles.admins.id)
+			: role === 'Moderation' ? member.roles.cache.has(this.client.tvfRoles.moderators.id) || member.roles.cache.has(this.client.tvfRoles.modHead.id) || member.roles.cache.has(this.client.tvfRoles.admins.id)
+				: role === 'Admin' ? member.roles.cache.has(this.client.tvfRoles.admins.id)
+					: role === 'Staff' ? member.roles.cache.has(this.client.tvfRoles.staff.id)
 						: false;
 	}
 
@@ -35,13 +35,13 @@ export default class TVFUtils {
 	 */
 	async sendDM(user: User, content: MessageContent): Promise<Message> {
 		return user.send(content).catch(() => {
-			const embed = new MessageEmbed()
+			const embed = this.client.utils.embed()
 				.setTitle('Sorry, I was unable to DM you!')
 				.setDescription('I tried to send you a DM, but there was an issue! This may be because you are not accepting DMs from server members. Please check if you have got it enabled, as shown below!')
 				.setThumbnail(this.client.server.iconURL())
 				.setImage('https://i.imgur.com/iY7a8RO.png');
 
-			this.client.tvfChannels.community.discussion.send(user, embed);
+			this.client.tvfChannels.discussion.send(user, embed);
 		}) as Promise<Message>;
 	}
 
@@ -82,5 +82,9 @@ export default class TVFUtils {
 		} while (context.measureText(text).width > canvas.width - 475);
 
 		return context.font;
+	}
+
+	embed() {
+		return new MessageEmbed();
 	}
 }

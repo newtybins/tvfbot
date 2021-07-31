@@ -7,8 +7,9 @@ import { Message } from 'discord.js';
 })
 export default class AdminOnly extends Precondition {
 	async run(msg: Message, command: Command<Args>){
-		console.log(command.category, msg.member.roles.cache.has(this.context.client.tvfRoles.staff.admins.id))
-		if (command.category.toLowerCase() === 'admin' && !msg.member.roles.cache.has(this.context.client.tvfRoles.staff.admins.id)) return this.error({ message: 'This command can only be used by server admins.' });
-		else this.ok();
+		if (command.category.toLowerCase() === 'admin') {
+			if (msg.member.roles.cache.has(this.context.client.tvfRoles.admins.id)) return this.ok();
+			else return this.error({ message: 'This command can only be used by server admins.' });
+		}
 	}
 }

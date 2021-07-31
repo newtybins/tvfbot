@@ -1,6 +1,10 @@
-import { Precondition } from '@sapphire/framework';
+import { Precondition, PreconditionOptions } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Message } from 'discord.js';
 
+@ApplyOptions<PreconditionOptions>({
+	name: 'blacklist'
+})
 export default class Blacklist extends Precondition {
 	async run(msg: Message){
 		const blacklisted = await this.context.client.db.blacklist.findMany();

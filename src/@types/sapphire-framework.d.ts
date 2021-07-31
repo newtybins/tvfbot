@@ -1,8 +1,6 @@
 import * as Discord from 'discord.js';
 import { PastebinClient } from '@catte_/pastebin.js';
-import TVFConstants from '../Constants';
-import TVFRoles from '../TVFRoles';
-import TVFChannels from '../TVFChannels';
+import Constants, { Roles, Channels } from '../Constants';
 import { PrismaClient } from '@prisma/client';
 import { AliasStore } from '@sapphire/framework';
 import TVFCommand from '../struct/TVFCommand';
@@ -14,10 +12,10 @@ declare module '@sapphire/framework' {
 		server: Discord.Guild;
 		pastebin: PastebinClient;
 		botLogger: Logger;
-		constants: typeof TVFConstants;
+		constants: typeof Constants;
 		utils: TVFUtils;
-		tvfRoles: ReturnType<typeof TVFRoles>;
-		tvfChannels: ReturnType<typeof TVFChannels>;
+		tvfRoles: ReturnType<typeof Roles>;
+		tvfChannels: ReturnType<typeof Channels>;
 		db: PrismaClient;
 		prefix: string;
 		botBanner: boolean;
@@ -32,5 +30,6 @@ declare module '@sapphire/framework' {
 	interface CommandOptions {
 		permissions?: Discord.PermissionResolvable[];
 		cooldown?: number;
+		general?: boolean;
 	}
 }

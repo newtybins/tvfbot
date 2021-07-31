@@ -1,20 +1,19 @@
 import { stripIndents } from 'common-tags';
 import { CommandOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Message, MessageEmbed } from 'discord.js';
-import TVFCommand from '../../struct/TVFCommand';
+import { Message } from 'discord.js';
+import TVFCommand from '../struct/TVFCommand';
 
 @ApplyOptions<CommandOptions>({
 	aliases: ['pong'],
-	description: 'Checks my latency!',
-	preconditions: ['admin']
+	description: 'Checks my latency!'
 })
 export default class Ping extends TVFCommand {
 	async run(msg: Message) {
 		// Create the embed
-		const embed = new MessageEmbed()
+		const embed = this.context.client.utils.embed()
 			.setTitle('pong <3')
-			.setColor(this.context.client.constants.colours.green)
+			.setColor(this.context.client.constants.Colours.Green)
 			.setThumbnail(msg.guild.iconURL())
 			.setAuthor(msg.author.username, msg.author.avatarURL())
 			.setDescription('Calculating ping...');

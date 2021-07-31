@@ -5,9 +5,7 @@ import { PastebinClient } from '@catte_/pastebin.js';
 import moment from 'moment';
 import si from 'systeminformation';
 import { SapphireClient } from '@sapphire/framework';
-import Constants from '../Constants';
-import TVFRoles from '../TVFRoles';
-import TVFChannels from '../TVFChannels';
+import Constants, { Roles, Channels } from '../Constants';
 import { PrismaClient } from '@prisma/client';
 import TVFUtils from './TVFUtils';
 
@@ -18,8 +16,8 @@ export default class TVFClient extends SapphireClient {
 	pastebin: PastebinClient;
 	utils: TVFUtils;
 	constants: typeof Constants;
-	tvfRoles: ReturnType<typeof TVFRoles>;
-    tvfChannels: ReturnType<typeof TVFChannels>;
+	tvfRoles: ReturnType<typeof Roles>;
+    tvfChannels: ReturnType<typeof Channels>;
 	db: PrismaClient;
 	botBanner = true;
 
@@ -108,14 +106,14 @@ export default class TVFClient extends SapphireClient {
 		this.on('error', (m) => this.botLogger.error(m));
 		process.on('uncaughtException', (m) => this.botLogger.error(m));
 
-		// Log into pastebin
+		// Log into Discord
+		await this.login(this.production ? process.env.STABLE : process.env.BETA);
+		this.botLogger.info('Logged into Discord!');
+
+		// Log into Pastebin
 		this.pastebin = new PastebinClient(process.env.PASTEBIN_KEY, process.env.PASTEBIN_USERNAME, process.env.PASTEBIN_PASSWORD)
 		await this.pastebin.login();
 		this.botLogger.info('Logged into Pastebin!');
-
-		// Log into discord
-		await this.login(this.production ? process.env.STABLE : process.env.BETA);
-		this.botLogger.info('Logged into Discord!');
 
 		// Save the server for use in other methods
 		this.server = this.guilds.cache.get('435894444101861408');

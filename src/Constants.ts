@@ -1,24 +1,33 @@
-export default {
-	colours: {
-		red: '#ff6961',
-		green: '#3aa4ae',
-		orange: '#ffb861',
-		yellow: '#ffc600',
-		white: '#ffffff'
-	},
+import { Guild, TextChannel, CategoryChannel } from 'discord.js';
 
-	emojis: {
-		wave: '👋',
-		tick: '✅',
-		grimacing: '😬',
-		square: '▫',
-		cross: '❌',
-		confetti: '🎉',
-		graph: '📈',
-		question: '❓',
-		upvote: '760820779344068609',
-		downvote: '760820793507971093'
-	},
+enum Colours {
+	Red = 0xFF6961,
+	Green = 0x3AA4AE,
+	Orange = 0xFFB861,
+	Yellow = 0xFFC600,
+	White = 0xFFFFFF
+}
+
+enum Emojis {
+	Wave = '👋',
+	Tick = '✅',
+	Cross = '❌',
+	Confetti = '🎉',
+	Upvote = '760820779344068609',
+	Downvote = '760820793507971093'
+}
+
+enum SuggestionStatus {
+	Suggested = 0,
+	Approved = 1,
+	Denied = 2,
+	Considered = 3
+}
+
+export default {
+	Colours,
+	Emojis,
+	SuggestionStatus,
 
 	levelRoles: [
 		{ level: 2, roleID: '441943660016173058', name: 'Elf' },
@@ -86,4 +95,55 @@ export default {
 	moment: 'ddd, MMM Do, YYYY h:mm A',
 	privateTimeout: 21600000,
 	blank: '\u200B'
-};
+}
+
+const Roles = (tvf: Guild) => {
+	const getRole = (id: string) => tvf.roles.cache.get(id);
+
+	return {
+		staff: getRole('452662935035052032'),
+		moderators: getRole('435897654682320925'),
+		support: getRole('761713326597865483'),
+		hackerbeing: getRole('462606587404615700'),
+		admins: getRole('452553630105468957'),
+		modHead: getRole('761714520535334922'),
+		supportHead: getRole('761714525161652224'),
+		helper: getRole('481130628344184832'),
+		welcomeTeam: getRole('499302826028302368'),
+		bot: getRole('451344230023954442'),
+	}
+}
+
+const Channels = (tvf: Guild) => {
+	const getChannel = (id: string) => tvf.channels.cache.get(id);
+	const getText = (id: string) => getChannel(id) as TextChannel;
+	const getCategory = (id: string) => getChannel(id) as CategoryChannel;
+
+	return {
+		general: getText('435894444584075265'),
+		tw: getText('618002057189785601'),
+		resources: getText('435923980336234516'),
+		rules: getText('481124133606916096'),
+		roles: getText('481131558296616961'),
+		meetTheStaff: getText('479744966575390733'),
+		announcements: getText('435910303864061962'),
+		botCommands: getText('464655374050656256'),
+		privateVenting: {
+			category: getCategory('768113425867472936'),
+			logs: getText('768113624861507624')
+		},
+		supportChat: getText('761718388090863616'),
+		modChat: getText('452905389596475404'),
+		modLogs: getText('499652797638115348'),
+		femboyHooters: getText('454382546181160961'),
+		suggestions: getText('474242779623456779'),
+		starboard: getText('646971709853007873'),
+		discussion: getText('458009085829316609'),
+		helpers: getText('471799568015818762')
+	}
+}
+
+export {
+	Roles,
+	Channels
+}

@@ -22,8 +22,8 @@ export default class Help extends TVFCommand {
 		if (!command) throw `Command not found. To vie all commands, run \`${args.commandContext.commandPrefix}help\``;
 
 		// Generate the embed
-		const embed = new MessageEmbed()
-			.setColor(this.context.client.constants.colours.green)
+		const embed = this.context.client.utils.embed()
+			.setColor(this.context.client.constants.Colours.Green)
 			.setThumbnail(this.context.client.user.avatarURL())
 			.setTitle(command.name)
 			.setDescription(command.description);
@@ -47,7 +47,7 @@ export default class Help extends TVFCommand {
 
 		categories.forEach(category => {
 			const commands = this._commands.filter(cmd => cmd.category.toLowerCase() === category.toLowerCase());
-			const embed = new MessageEmbed()
+			const embed = this.context.client.utils.embed()
 				.setTitle(category)
 				.setDescription(commands.map(cmd => `\`${cmd.name}\` → ${cmd.description || 'No description was provided'}`));
 
@@ -60,7 +60,7 @@ export default class Help extends TVFCommand {
 			.setChannel(msg.channel as TextChannel)
 			.setPageIndicator(true)
 			.setThumbnail(this.context.client.user.avatarURL())
-			.setColor(this.context.client.constants.colours.green)
+			.setColor(this.context.client.constants.Colours.Green)
 			.build();
 	}
 }
