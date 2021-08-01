@@ -19,6 +19,7 @@ export default class TVFClient extends SapphireClient {
 	tvfRoles: ReturnType<typeof Roles>;
     tvfChannels: ReturnType<typeof Channels>;
 	db: PrismaClient;
+	categories: Set<string>;
 	botBanner = true;
 
 	/**
@@ -63,7 +64,7 @@ export default class TVFClient extends SapphireClient {
 			info: 'bold cyan',
 			debug: 'bold white',
 			command: 'bold yellow',
-			db: 'bold white',
+			db: 'bold white'
 		});
 
 		// Create the logger
@@ -91,7 +92,7 @@ export default class TVFClient extends SapphireClient {
 				db: 2,
 				info: 3,
 				warn: 4,
-				error: 5,
+				error: 5
 			}
 		}) as Logger;
 

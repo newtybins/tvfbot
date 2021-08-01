@@ -5,6 +5,8 @@ import TVFClient from './TVFClient';
 export default abstract class TVFCommand extends Command {
 	public fullCategory: string[];
 	public client: TVFClient;
+	public usage: string;
+	public examples: string[];
 
 	public constructor(context: PieceContext, { name, ...options }: CommandOptions) {
 		const paths = context.path.split(path.sep);
@@ -25,6 +27,8 @@ export default abstract class TVFCommand extends Command {
 		super(context, { name, ...options });
 		
 		this.fullCategory = fullCategory;
+		this.usage = options.usage;
+		this.examples = options.examples;
 		this.client = this.context.client;
 	}
 

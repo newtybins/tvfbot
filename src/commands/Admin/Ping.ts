@@ -2,18 +2,23 @@ import { stripIndents } from 'common-tags';
 import { CommandOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Message } from 'discord.js';
-import TVFCommand from '../struct/TVFCommand';
+import TVFCommand from '../../struct/TVFCommand';
 
 @ApplyOptions<CommandOptions>({
+	name: 'ping',
 	aliases: ['pong'],
-	description: 'Checks my latency!'
+	description: 'Checks my latency!',
+	usage: 'ping',
+	examples: [
+		'ping'
+	]
 })
 export default class Ping extends TVFCommand {
 	async run(msg: Message) {
 		// Create the embed
-		const embed = this.context.client.utils.embed()
+		const embed = this.client.utils.embed()
 			.setTitle('pong <3')
-			.setColor(this.context.client.constants.Colours.Green)
+			.setColor(this.client.constants.Colours.Green)
 			.setThumbnail(msg.guild.iconURL())
 			.setAuthor(msg.author.username, msg.author.avatarURL())
 			.setDescription('Calculating ping...');
@@ -25,7 +30,7 @@ export default class Ping extends TVFCommand {
 		// Update the embed
 		embed.setDescription(stripIndents`
             Bot Latency: ${ping}ms
-            API Latency: ${this.context.client.ws.ping}ms
+            API Latency: ${this.client.ws.ping}ms
         `);
 
 		await resultMsg.edit(embed);

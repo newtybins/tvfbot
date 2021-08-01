@@ -2,8 +2,6 @@ import * as Discord from 'discord.js';
 import { PastebinClient } from '@catte_/pastebin.js';
 import Constants, { Roles, Channels } from '../Constants';
 import { PrismaClient } from '@prisma/client';
-import { AliasStore } from '@sapphire/framework';
-import TVFCommand from '../struct/TVFCommand';
 import TVFUtils from '../struct/TVFUtils';
 
 declare module '@sapphire/framework' {
@@ -18,6 +16,7 @@ declare module '@sapphire/framework' {
 		tvfChannels: ReturnType<typeof Channels>;
 		db: PrismaClient;
 		prefix: string;
+		categories: Set<string>;
 		botBanner: boolean;
 
 		start(): Promise<void>;
@@ -32,5 +31,7 @@ declare module '@sapphire/framework' {
 		permissions?: Discord.PermissionResolvable[];
 		cooldown?: number;
 		general?: boolean;
+		usage: string;
+		examples: string[];
 	}
 }
