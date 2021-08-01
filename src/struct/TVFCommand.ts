@@ -1,8 +1,10 @@
 import { Command, CommandOptions, PieceContext, PreconditionEntryResolvable, PermissionsPrecondition } from '@sapphire/framework';
 import path from 'path';
+import TVFClient from './TVFClient';
 
 export default abstract class TVFCommand extends Command {
 	public fullCategory: string[];
+	public client: TVFClient;
 
 	public constructor(context: PieceContext, { name, ...options }: CommandOptions) {
 		const paths = context.path.split(path.sep);
@@ -23,6 +25,7 @@ export default abstract class TVFCommand extends Command {
 		super(context, { name, ...options });
 		
 		this.fullCategory = fullCategory;
+		this.client = this.context.client;
 	}
 
 	public get category() {

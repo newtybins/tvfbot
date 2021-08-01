@@ -1,18 +1,19 @@
-import { Event, EventOptions } from '@sapphire/framework';
+import { EventOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Roles, Channels } from '../Constants';
+import TVFEvent from '../struct/TVFEvent';
 
 @ApplyOptions<EventOptions>({
 	name: 'ready',
 	once: true
 })
-export default class Ready extends Event {
+export default class Ready extends TVFEvent {
 	async run() {
 		// Load roles and channels
-		this.context.client.tvfRoles = Roles(this.context.client.server);
-		this.context.client.tvfChannels = Channels(this.context.client.server);
+		this.client.tvfRoles = Roles(this.context.client.server);
+		this.client.tvfChannels = Channels(this.context.client.server);
 
-		if (this.context.client.production) {
+		if (this.client.production) {
 			// Ensure all documents exist
 		}
 	}

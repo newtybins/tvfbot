@@ -20,6 +20,7 @@ declare module '@sapphire/framework' {
 		prefix: string;
 		botBanner: boolean;
 
+		start(): Promise<void>;
 		userLogCompiler(u: Discord.User): string;
 	}
 
