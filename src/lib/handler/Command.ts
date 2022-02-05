@@ -14,12 +14,14 @@ import Embed from '~structures/Embed';
 abstract class Command extends SapphireCommand {
     public client: Client;
     public logger: Logger;
+    private args: Command.Argument[];
 
-    constructor(context: PieceContext, options: Command.Options) {
+    constructor(context: PieceContext, { args, ...options }: Command.Options) {
         super(context, options);
 
         this.client = this.container.client;
         this.logger = new Logger(this.client, this.name);
+        this.args = args ?? [];
     }
 
     public onLoad() {
@@ -32,13 +34,25 @@ abstract class Command extends SapphireCommand {
         super.onUnload();
     }
 
+    private get usage(): string {
+        let usage = `${this.name}`;
+
+        this.args.forEach(argument => {
+            usage += ` ${argument.required ? '<' : '['}${argument.name}${
+                argument.required ? '>' : ']'
+            }`;
+        });
+
+        return usage;
+    }
+
     public generateHelpEmbed(message: Command.Message): Embed {
-        const embed = new Embed();
+        const embed = new Embed('normal', message.author);
 
         embed
-            .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
             .setThumbnail(this.client.user.avatarURL())
-            .setTitle(title(this.name));
+            .setTitle(title(this.name))
+            .addField('Usage', this.usage);
 
         if (this.description) embed.setDescription(this.description);
 
@@ -47,7 +61,15 @@ abstract class Command extends SapphireCommand {
 }
 
 namespace Command {
-    export type Options = CommandOptions;
+    export interface Argument {
+        name: string;
+        required?: boolean;
+    }
+
+    export type Options = CommandOptions & {
+        args?: Argument[];
+    };
+
     export type Message = DiscordMessage;
     export type Args = SapphireArgs;
     export type Context = SapphireCommand.RunContext;

@@ -21,6 +21,7 @@
         "@sapphire/decorators": "^4.2.0",
         "@sapphire/framework": "^2.3.0",
         "bluebird": "^3.7.2",
+        "common-tags": "^1.8.2",
         "console-table-printer": "^2.10.0",
         "dayjs": "^1.10.7",
         "discord-api-types": "^0.26.1",
@@ -33,6 +34,7 @@
     },
     "devDependencies": {
         "@types/bluebird": "^3.5.36",
+        "@types/common-tags": "^1.8.1",
         "@types/node": "16.9.3",
         "@types/title": "^3.4.1",
         "cross-env": "^7.0.3",

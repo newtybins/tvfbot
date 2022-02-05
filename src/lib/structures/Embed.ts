@@ -1,5 +1,5 @@
 import type { APIEmbed, APIGuild, APIUser } from 'discord-api-types';
-import { MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import { MessageEmbed, MessageEmbedOptions, User } from 'discord.js';
 import { REST as RESTClient } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import { discord, errorColour, successColour, tvfColour, tvfId } from '~config';
@@ -24,7 +24,11 @@ rest.get(Routes.user()).then((user: APIUser) => {
 type EmbedType = 'normal' | 'success' | 'error';
 
 export default class Embed extends MessageEmbed {
-    constructor(type: EmbedType = 'normal', data?: MessageEmbed | MessageEmbedOptions | APIEmbed) {
+    constructor(
+        type: EmbedType = 'normal',
+        author?: User,
+        data?: MessageEmbed | MessageEmbedOptions | APIEmbed
+    ) {
         super(data);
 
         // Update the colour
@@ -47,5 +51,13 @@ export default class Embed extends MessageEmbed {
         });
 
         this.setThumbnail(userIcon);
+
+        // Set the author if it is possible
+        if (author) {
+            this.setAuthor({
+                name: author.username,
+                iconURL: author.avatarURL()
+            });
+        }
     }
 }

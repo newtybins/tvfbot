@@ -6,9 +6,11 @@ specifiers:
   '@sapphire/decorators': ^4.2.0
   '@sapphire/framework': ^2.3.0
   '@types/bluebird': ^3.5.36
+  '@types/common-tags': ^1.8.1
   '@types/node': 16.9.3
   '@types/title': ^3.4.1
   bluebird: ^3.7.2
+  common-tags: ^1.8.2
   console-table-printer: ^2.10.0
   cross-env: ^7.0.3
   dayjs: ^1.10.7
@@ -36,6 +38,7 @@ dependencies:
   '@sapphire/decorators': 4.2.0
   '@sapphire/framework': 2.3.0
   bluebird: 3.7.2
+  common-tags: 1.8.2
   console-table-printer: 2.10.0
   dayjs: 1.10.7
   discord-api-types: 0.26.1
@@ -48,6 +51,7 @@ dependencies:
 
 devDependencies:
   '@types/bluebird': 3.5.36
+  '@types/common-tags': 1.8.1
   '@types/node': 16.9.3
   '@types/title': 3.4.1
   cross-env: 7.0.3
@@ -244,6 +248,10 @@ packages:
 
   /@types/bluebird/3.5.36:
     resolution: {integrity: sha512-HBNx4lhkxN7bx6P0++W8E289foSu8kO8GCk2unhuVggO+cE7rh9DhZUyPhUxNRG9m+5B5BTKxZQ5ZP92x/mx9Q==}
+    dev: true
+
+  /@types/common-tags/1.8.1:
+    resolution: {integrity: sha512-20R/mDpKSPWdJs5TOpz3e7zqbeCNuMCPhV7Yndk9KU2Rbij2r5W4RzwDPkzC+2lzUqXYu9rFzTktCBnDjHuNQg==}
     dev: true
 
   /@types/glob/7.2.0:
@@ -1000,6 +1008,11 @@ packages:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
     dev: false
     optional: true
+
+  /common-tags/1.8.2:
+    resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==}
+    engines: {node: '>=4.0.0'}
+    dev: false
 
   /component-emitter/1.3.0:
     resolution: {integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==}
