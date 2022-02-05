@@ -8,7 +8,7 @@ import { stripIndents } from 'common-tags';
 })
 export default class Ping extends Command {
     public async messageRun(message: Command.Message) {
-        const embed = new Embed('normal', message.author)
+        const embed = new Embed('normal', message.member)
             .setTitle('pong!')
             .setDescription('Calculating ping...');
 

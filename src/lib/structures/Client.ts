@@ -1,9 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import { SapphireClient } from '@sapphire/framework';
+import { Guild, GuildMember } from 'discord.js';
+import { newtId, tvfId } from '~config';
+import fetchRoles from '../tvf/roles';
 
-export default class Client extends SapphireClient {
+class Client extends SapphireClient {
     public db = new PrismaClient();
     public isProduction = process.env.NODE_ENV === 'production';
+
+    public tvf: Client.TVF = {
+        server: null,
+        roles: null,
+        newt: null
+    };
 
     constructor() {
         super({
@@ -23,4 +32,25 @@ export default class Client extends SapphireClient {
             defaultPrefix: process.env.NODE_ENV === 'production' ? 'tvf ' : 'tvf beta '
         });
     }
+
+    public async login(token: string) {
+        const response = await super.login(token);
+
+        // Fetch information about TVF
+        this.tvf.server = await this.guilds.fetch(tvfId);
+        this.tvf.roles = await fetchRoles(this.tvf.server);
+        this.tvf.newt = await this.tvf.server.members.fetch(newtId);
+
+        return response;
+    }
 }
+
+namespace Client {
+    export interface TVF {
+        server: Guild;
+        roles: Awaited<ReturnType<typeof fetchRoles>>;
+        newt: GuildMember;
+    }
+}
+
+export default Client;

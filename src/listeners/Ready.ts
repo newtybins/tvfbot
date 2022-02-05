@@ -24,7 +24,9 @@ export default class Ready extends Listener<typeof Listener.Events.ClientReady> 
                 .split('\n')
                 .filter(status => status.trim() !== '');
 
-            this.logger.info(`Succesfully read ${this.statusList.length} statuses from the disk!`);
+            this.logger.info(
+                `Succesfully read ${this.statusList.length} status(es) from the disk!`
+            );
         } catch (e) {
             this.logger.error('There was a problem parsing the statuses file. Exiting bot!');
             process.exit();

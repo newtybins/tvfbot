@@ -1,7 +1,6 @@
-import type { APIEmbed, APIGuild, APIUser } from 'discord-api-types';
-import { MessageEmbed, MessageEmbedOptions, User } from 'discord.js';
+import { GuildMember, MessageEmbed, MessageEmbedOptions } from 'discord.js';
 import { REST as RESTClient } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
+import { Routes, APIEmbed, APIGuild, APIUser } from 'discord-api-types/v9';
 import { discord, errorColour, successColour, tvfColour, tvfId } from '~config';
 
 const rest = new RESTClient();
@@ -26,7 +25,7 @@ type EmbedType = 'normal' | 'success' | 'error';
 export default class Embed extends MessageEmbed {
     constructor(
         type: EmbedType = 'normal',
-        author?: User,
+        author?: GuildMember,
         data?: MessageEmbed | MessageEmbedOptions | APIEmbed
     ) {
         super(data);
@@ -55,7 +54,7 @@ export default class Embed extends MessageEmbed {
         // Set the author if it is possible
         if (author) {
             this.setAuthor({
-                name: author.username,
+                name: author.nickname ?? author.user.username,
                 iconURL: author.avatarURL()
             });
         }

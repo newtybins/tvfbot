@@ -39,15 +39,15 @@ abstract class Command extends SapphireCommand {
 
         this.args.forEach(argument => {
             usage += ` ${argument.required ? '<' : '['}${argument.name}${
-                argument.required ? '>' : ']'
-            }`;
+                argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
+            }${argument.required ? '>' : ']'}`;
         });
 
         return usage;
     }
 
     public generateHelpEmbed(message: Command.Message): Embed {
-        const embed = new Embed('normal', message.author);
+        const embed = new Embed('normal', message.member);
 
         embed
             .setThumbnail(this.client.user.avatarURL())
@@ -64,6 +64,7 @@ namespace Command {
     export interface Argument {
         name: string;
         required?: boolean;
+        options?: string[];
     }
 
     export type Options = CommandOptions & {

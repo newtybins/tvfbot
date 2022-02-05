@@ -7,7 +7,12 @@ interface Commands {
 
 @Command.Config({
     name: 'help',
-    description: 'Find out more about how to use the bot!'
+    description: 'Find out more about how to use the bot!',
+    args: [
+        {
+            name: 'command'
+        }
+    ]
 })
 export default class Help extends Command {
     private get commands(): Commands {
