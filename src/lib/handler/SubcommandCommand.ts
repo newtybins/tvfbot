@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
-import type { Message as DiscordMessage } from 'discord.js';
+import type { Args as SapphireArgs } from '@sapphire/framework';
+import type { GuildMember, Message as DiscordMessage } from 'discord.js';
 import title from 'title';
 import Client from '~structures/Client';
 import Embed from '~structures/Embed';
@@ -10,17 +11,30 @@ import Command from '~handler/Command';
 class SubcommandCommand extends SubCommandPluginCommand {
     public client: Client;
     public logger: Logger;
-    private args: SubcommandCommand.Arguments;
+    private subcommands: SubcommandCommand.Subcommand[];
 
     constructor(
         context: SubcommandCommand.Context,
-        { args, ...options }: SubcommandCommand.Options
+        { subcommands, ...options }: SubcommandCommand.Options
     ) {
         super(context, options);
 
         this.client = this.container.client;
         this.logger = new Logger(this.client, this.name);
-        this.args = args;
+        this.subcommands = subcommands;
+
+        subcommands.forEach(subcommand => {
+            // @ts-ignore
+            if (subcommand.default && !this.subCommands?.default)
+                // @ts-ignore
+                this.subCommands.default = { input: subcommand.name, output: subcommand.name };
+            else {
+                // @ts-ignore
+                this.subCommands.entries ??= [];
+                // @ts-ignore
+                this.subCommands.entries.push({ input: subcommand.name, output: subcommand.name });
+            }
+        });
     }
 
     public onLoad() {
@@ -33,39 +47,71 @@ class SubcommandCommand extends SubCommandPluginCommand {
         super.onUnload();
     }
 
-    private get usage(): string[] {
-        const usage = [];
-        const subcommands = Object.keys(this.args);
+    private generateUsage(requestedBy: GuildMember): string[] {
+        let usages = this.subcommands.map(({ name, args, restrictedTo }) => {
+            let permissionToView = true;
 
-        subcommands.forEach(subcommand => {
-            const args = this.args[subcommand];
-            let subcommandUsage = `${this.name}`;
+            if (restrictedTo?.length > 0) {
+                restrictedTo.forEach(role => {
+                    if (!requestedBy.roles.cache.has(role) && permissionToView)
+                        permissionToView = false;
+                });
+            }
 
-            args.forEach(argument => {
-                subcommandUsage += ` ${argument.required ? '<' : '['}${argument.name}${
+            if (permissionToView) {
+                let usage = `${this.name} ${name}`;
+
+                args?.forEach(argument => {
+                    usage += ` ${argument.required ? '<' : '['}${argument.name}${
+                        argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
+                    }${argument.required ? '>' : ']'}`;
+                });
+
+                return usage;
+            } else {
+                return null;
+            }
+        });
+
+        const defaultSubcommand = this.subcommands.find(subcommand => subcommand.default);
+
+        if (defaultSubcommand) {
+            let usage = `${this.name}`;
+
+            defaultSubcommand?.args.forEach(argument => {
+                usage += ` ${argument.required ? '<' : '['}${argument.name}${
                     argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
                 }${argument.required ? '>' : ']'}`;
             });
 
-            usage.push(subcommandUsage);
-        });
+            usages = [usage, ...usages];
+        }
 
-        // Argumentless subcommands
-        // @ts-ignore
-        this.subCommands.entries
-            .map(subcommand => subcommand.input)
-            .filter(subcommand => !subcommands.includes(subcommand))
-            .forEach(subcommand => usage.push(`${this.name} ${subcommand}`));
-
-        return this.client.utils.sortAlphabetically(usage);
+        return this.client.utils.sortAlphabetically(usages.filter(u => u));
     }
 
     public generateHelpEmbed(message: SubcommandCommand.Message, prefix: string): Embed {
         const embed = new Embed('normal', message.member);
-        // @ts-ignore
-        const subcommands = [...this.subCommands.entries, this.subCommands?.default]
-            .filter(s => s)
-            .map(subcommand => subcommand.input);
+        const subcommands = this.subcommands
+            .map(subcommand => {
+                let permissionToView = true;
+
+                if (subcommand?.restrictedTo?.length > 0) {
+                    subcommand.restrictedTo.forEach(role => {
+                        if (!message.member.roles.cache.has(role) && permissionToView)
+                            permissionToView = false;
+                    });
+                }
+
+                if (permissionToView) {
+                    return `${subcommand.name}${
+                        subcommand.description ? ` - ${subcommand.description.toLowerCase()}` : ''
+                    }`;
+                } else {
+                    return null;
+                }
+            })
+            .filter(s => s);
 
         embed
             .setThumbnail(this.client.user.avatarURL())
@@ -73,7 +119,9 @@ class SubcommandCommand extends SubCommandPluginCommand {
             .addField('Subcommands', `\`\`\`${subcommands.join('\n')}\`\`\``)
             .addField(
                 'Usage',
-                `\`\`\`${this.usage.map(usage => `${prefix}${usage}`).join('\n')}\`\`\``
+                `\`\`\`${this.generateUsage(message.member)
+                    .map(usage => `${prefix}${usage}`)
+                    .join('\n')}\`\`\``
             );
 
         if (this.description) embed.setDescription(this.description);
@@ -83,18 +131,27 @@ class SubcommandCommand extends SubCommandPluginCommand {
 }
 
 namespace SubcommandCommand {
-    export interface Arguments {
-        [subcommand: string]: Command.Argument[];
+    export interface Subcommand {
+        name: string;
+        default?: boolean;
+        args?: Command.Argument[];
+        description?: string;
+        restrictedTo?: string[];
     }
 
     export type Options = SubCommandPluginCommand.Options & {
-        args?: Arguments;
+        subcommands?: Subcommand[];
     };
 
     export type Context = SubCommandPluginCommand.Context;
     export type Message = DiscordMessage;
+    export type Args = SapphireArgs;
 
-    export const Config = (options: Options) => ApplyOptions<Options>(options);
+    export const Config = (options: Options) =>
+        ApplyOptions<Options>({
+            ...options,
+            subCommands: []
+        });
 }
 
 export default SubcommandCommand;
