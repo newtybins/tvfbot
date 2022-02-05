@@ -2,9 +2,17 @@
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "outDir": "dist",
-        "esModuleInterop": true
+        "outDir": "build",
+        "esModuleInterop": true,
+        "baseUrl": "./",
+        "paths": {
+            "~structures/*": ["./src/lib/structures/*"],
+            "~handler/*": ["./src/lib/handler/*"],
+            "~config": ["./src/config"]
+        },
+        "plugins": [{ "transform": "ts-transform-paths" }],
+        "experimentalDecorators": true
     },
     "include": ["src/**/*.ts"],
-    "exclude": ["node_modules", "src/_*/**/*"]
+    "exclude": ["node_modules"]
 }

@@ -5,37 +5,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES")
-}
-
-model Blacklist {
-  id     String  @id @unique
-  reason String?
+  url      = env("DB_URL")
 }
 
 model User {
-  id          String   @id @unique
-  level       Int      @default(1)
-  xp          Int      @default(1)
-  stickyRoles String[]
-  privateID   String?  @unique
-}
+  id    String @id(map: "users_pk") @unique(map: "users_id_uindex")
+  level Int    @default(1)
+  xp    Int    @default(0)
 
-model Private {
-  topic       String?
-  requestedAt DateTime? @db.Timestamptz(6)
-  startedAt   DateTime? @db.Timestamptz(6)
-  textID      String?
-  voiceID     String?
-  id          String    @id
-  pastebin    String?   @unique
-}
-
-model Suggestion {
-  id        Int     @id @default(autoincrement())
-  authorID  String
-  text      String
-  status    Int?    @default(0)
-  messageID String? @unique
-  comment   String?
+  @@map("Users")
 }

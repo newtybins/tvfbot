@@ -1,6 +1,9 @@
-import Client from './struct/TVFClient';
-import * as dotenv from 'dotenv';
-import Constants from './Constants';
+import { discord } from '~config';
+import Client from '~structures/Client';
+import Logger from '~structures/Logger';
 
-dotenv.config();
-new Client(Constants).start();
+// Start the bot
+const tvf = new Client();
+const logger = new Logger(tvf);
+
+tvf.login(discord.token).then(() => logger.info('Logged into Discord!'));
