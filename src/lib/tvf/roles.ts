@@ -1,4 +1,4 @@
-import { Guild } from 'discord.js';
+import type { Guild } from 'discord.js';
 
 const fetchRoles = async (tvf: Guild) => {
     return {

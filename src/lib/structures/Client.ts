@@ -2,8 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import { SapphireClient } from '@sapphire/framework';
 import { Guild, GuildMember } from 'discord.js';
 import { newtId, tvfId } from '~config';
-import fetchRoles from '../tvf/roles';
+import fetchRoles from '~tvf/roles';
 import Utils from '~utils';
+import fetchChannels from '~tvf/channels';
 
 class Client extends SapphireClient {
     public db = new PrismaClient();
@@ -13,6 +14,7 @@ class Client extends SapphireClient {
     public tvf: Client.TVF = {
         server: null,
         roles: null,
+        channels: null,
         newt: null
     };
 
@@ -41,6 +43,7 @@ class Client extends SapphireClient {
         // Fetch information about TVF
         this.tvf.server = await this.guilds.fetch(tvfId);
         this.tvf.roles = await fetchRoles(this.tvf.server);
+        this.tvf.channels = await fetchChannels(this.tvf.server);
         this.tvf.newt = await this.tvf.server.members.fetch(newtId);
 
         return response;
@@ -51,6 +54,7 @@ namespace Client {
     export interface TVF {
         server: Guild;
         roles: Awaited<ReturnType<typeof fetchRoles>>;
+        channels: Awaited<ReturnType<typeof fetchChannels>>;
         newt: GuildMember;
     }
 }

@@ -1,5 +1,4 @@
 import type { GuildMember } from 'discord.js';
-import { newtId } from '~config';
 import emitters from '~emitters';
 import Listener from '~handler/Listener';
 
@@ -7,7 +6,7 @@ import Listener from '~handler/Listener';
     name: 'Get XP',
     emitter: emitters.levelling,
     event: Listener.Events.Levelling.GetXp,
-    production: false
+    production: true
 })
 export default class GetXP extends Listener<typeof Listener.Events.Levelling.GetXp> {
     public async run(member: GuildMember) {
@@ -19,7 +18,6 @@ export default class GetXP extends Listener<typeof Listener.Events.Levelling.Get
         });
 
         const xp = user.xp + Math.floor(Math.random() * 25) + 15;
-        if (member.id === newtId) member.send(xp.toString());
         let level = user.level;
         const xpRequiredForNextLevel = this.client.utils.calculateXp(level + 1);
 
