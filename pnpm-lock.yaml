@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@discordjs/rest': ^0.3.0
   '@prisma/client': ^3.9.1
   '@sapphire/decorators': ^4.2.0
   '@sapphire/framework': ^2.3.0
@@ -11,6 +12,7 @@ specifiers:
   console-table-printer: ^2.10.0
   cross-env: ^7.0.3
   dayjs: ^1.10.7
+  discord-api-types: ^0.26.1
   discord.js: ^13.6.0
   dotenv: ^16.0.0
   figures: 3.2.0
@@ -29,12 +31,14 @@ specifiers:
   typescript: 4.4.3
 
 dependencies:
+  '@discordjs/rest': 0.3.0
   '@prisma/client': 3.9.1_prisma@3.9.1
   '@sapphire/decorators': 4.2.0
   '@sapphire/framework': 2.3.0
   bluebird: 3.7.2
   console-table-printer: 2.10.0
   dayjs: 1.10.7
+  discord-api-types: 0.26.1
   discord.js: 13.6.0
   dotenv: 16.0.0
   figures: 3.2.0
@@ -79,6 +83,21 @@ packages:
   /@discordjs/collection/0.4.0:
     resolution: {integrity: sha512-zmjq+l/rV35kE6zRrwe8BHqV78JvIh2ybJeZavBi5NySjWXqN3hmmAKg7kYMMXSeiWtSsMoZ/+MQi0DiQWy2lw==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    dev: false
+
+  /@discordjs/rest/0.3.0:
+    resolution: {integrity: sha512-F9aeP3odlAlllM1ciBZLdd+adiAyBj4VaZBejj4UMj4afE2wfCkNTGvYYiRxrXUE9fN7e/BuDP2ePl0tVA2m7Q==}
+    engines: {node: '>=16.9.0'}
+    dependencies:
+      '@discordjs/collection': 0.4.0
+      '@sapphire/async-queue': 1.2.0
+      '@sapphire/snowflake': 3.1.0
+      discord-api-types: 0.26.1
+      form-data: 4.0.0
+      node-fetch: 2.6.7
+      tslib: 2.3.1
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -181,6 +200,11 @@ packages:
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dependencies:
       '@sapphire/time-utilities': 1.6.0
+    dev: false
+
+  /@sapphire/snowflake/3.1.0:
+    resolution: {integrity: sha512-K+OiqXSx4clIaXcoaghrCV56zsm3bZZ5SBpgJkgvAKegFFdETMntHviUfypjt8xVleIuDaNyQA4APOIl3BMcxg==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dev: false
 
   /@sapphire/time-utilities/1.6.0:
