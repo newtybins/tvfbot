@@ -5,4 +5,8 @@ export default class Utils {
     calculateXp(level: number): number {
         return (625 * level ** 2) / 9;
     }
+
+    sortAlphabetically(input: string[]): string[] {
+        return input.sort((a, b) => a.localeCompare(b));
+    }
 }

@@ -13,6 +13,6 @@ declare module '@sapphire/framework' {
     }
 
     interface Command {
-        generateHelpEmbed(message: Message, context: Command.RunContext): Embed;
+        generateHelpEmbed(message: Message, prefix: string): Embed;
     }
 }

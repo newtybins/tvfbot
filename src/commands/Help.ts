@@ -42,7 +42,7 @@ export default class Help extends Command {
             const command = this.client.stores.get('commands').get(commandName);
 
             if (command) {
-                embed = command.generateHelpEmbed(message, context);
+                embed = command.generateHelpEmbed(message, context.commandPrefix);
             } else {
                 embed = new Embed('error')
                     .setTitle('Command not found!')
@@ -59,7 +59,7 @@ export default class Help extends Command {
         }
 
         if (appendCommandList) {
-            const categories = Object.keys(this.commands).sort((a, b) => a.localeCompare(b));
+            const categories = this.client.utils.sortAlphabetically(Object.keys(this.commands));
 
             categories.forEach(category => {
                 const commands = this.commands[category];
