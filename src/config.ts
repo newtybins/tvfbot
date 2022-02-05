@@ -19,3 +19,5 @@ export const discord = {
 export const breathingGif = 'https://media.giphy.com/media/krP2NRkLqnKEg/giphy.gif';
 export const tvfId = '435894444101861408';
 export const tvfColour: Colour = '#16c3b3';
+export const errorColour: Colour = '#ff6961';
+export const successColour: Colour = '#04ac84';
