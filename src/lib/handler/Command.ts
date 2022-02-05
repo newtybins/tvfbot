@@ -46,13 +46,13 @@ abstract class Command extends SapphireCommand {
         return usage;
     }
 
-    public generateHelpEmbed(message: Command.Message): Embed {
+    public generateHelpEmbed(message: Command.Message, context: Command.Context): Embed {
         const embed = new Embed('normal', message.member);
 
         embed
             .setThumbnail(this.client.user.avatarURL())
             .setTitle(title(this.name))
-            .addField('Usage', this.usage);
+            .addField('Usage', `\`\`\`${context.commandPrefix}${this.usage}\`\`\``);
 
         if (this.description) embed.setDescription(this.description);
 

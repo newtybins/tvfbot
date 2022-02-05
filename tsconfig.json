@@ -4,11 +4,13 @@
         "module": "commonjs",
         "outDir": "build",
         "esModuleInterop": true,
-        "baseUrl": "./",
+        "baseUrl": "./src",
         "paths": {
-            "~structures/*": ["./src/lib/structures/*"],
-            "~handler/*": ["./src/lib/handler/*"],
-            "~config": ["./src/config"]
+            "~structures/*": ["./lib/structures/*"],
+            "~handler/*": ["./lib/handler/*"],
+            "~config": ["./config"],
+            "~utils": ["./lib/Utils"],
+            "~emitters": ["./lib/emitters/index"]
         },
         "plugins": [{ "transform": "ts-transform-paths" }],
         "experimentalDecorators": true

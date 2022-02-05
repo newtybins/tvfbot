@@ -3,10 +3,12 @@ import { SapphireClient } from '@sapphire/framework';
 import { Guild, GuildMember } from 'discord.js';
 import { newtId, tvfId } from '~config';
 import fetchRoles from '../tvf/roles';
+import Utils from '~utils';
 
 class Client extends SapphireClient {
     public db = new PrismaClient();
-    public isProduction = process.env.NODE_ENV === 'production';
+    public production = process.env.NODE_ENV === 'production';
+    public utils = new Utils();
 
     public tvf: Client.TVF = {
         server: null,

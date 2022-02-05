@@ -42,7 +42,7 @@ export default class Help extends Command {
             const command = this.client.stores.get('commands').get(commandName);
 
             if (command) {
-                embed = command.generateHelpEmbed(message);
+                embed = command.generateHelpEmbed(message, context);
             } else {
                 embed = new Embed('error')
                     .setTitle('Command not found!')

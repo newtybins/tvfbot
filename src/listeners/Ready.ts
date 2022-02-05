@@ -7,10 +7,10 @@ import type { ActivityTypes } from 'discord.js/typings/enums';
 
 @Listener.Config({
     name: 'ready',
-    event: Listener.Events.ClientReady,
+    event: Listener.Events.Client.ClientReady,
     once: true
 })
-export default class Ready extends Listener<typeof Listener.Events.ClientReady> {
+export default class Ready extends Listener<typeof Listener.Events.Client.ClientReady> {
     private statusList: string[];
 
     constructor(context: Listener.Context, options: Listener.Options) {

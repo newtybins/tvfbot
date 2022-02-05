@@ -22,3 +22,9 @@ export const tvfColour: Colour = '#16c3b3';
 export const errorColour: Colour = '#ff6961';
 export const successColour: Colour = '#04ac84';
 export const newtId = '326767126406889473';
+
+export const timeouts: {
+    [key: string]: number;
+} = {
+    xp: 60000
+};
