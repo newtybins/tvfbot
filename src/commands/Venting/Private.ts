@@ -18,7 +18,7 @@ const restrictedTo = ['761713326597865483'];
             default: true,
             args: [
                 {
-                    name: 'reason',
+                    name: 'topic',
                     required: true
                 }
             ]
@@ -105,7 +105,7 @@ export default class Private extends SubcommandCommand {
         );
     }
 
-    // todo: replace all references of reason with topic
+    // todo: replace all references of topic with topic
     /**
      * Request a private venting session
      */
@@ -123,13 +123,13 @@ export default class Private extends SubcommandCommand {
             );
         }
 
-        const { value: reason } = await args.restResult('string');
+        const { value: topic } = await args.restResult('string');
 
-        // Reject the user on the grounds of no reason
-        if (!reason) {
+        // Reject the user on the grounds of no topic
+        if (!topic) {
             return await this.reject(
                 message,
-                'You must provide a reason for your private vent!',
+                'You must provide a topic for your private vent!',
                 context.commandPrefix
             );
         }
@@ -138,7 +138,7 @@ export default class Private extends SubcommandCommand {
         const { id: friendlyId } = this.client.utils;
 
         await this.client.db.privateVent.create({
-            data: { userId: message.author.id, friendlyId, reason }
+            data: { userId: message.author.id, friendlyId, topic }
         });
 
         // Setup all of the timeouts and the expiry countdown
@@ -147,7 +147,7 @@ export default class Private extends SubcommandCommand {
             .setDescription(
                 `Feel free to run \`${context.commandPrefix}start ${friendlyId}\` to begin the session (:`
             )
-            .addField('Reason', reason);
+            .addField('topic', topic);
 
         for (let i = 1; i <= timeouts.privateHours; i++) {
             timeout(`${friendlyId}+${i}`, i * hour, () => {
@@ -200,7 +200,7 @@ export default class Private extends SubcommandCommand {
                 .setDescription(
                     `Feel free to run \`${context.commandPrefix}start ${friendlyId}\` to begin the session (:`
                 )
-                .addField('Reason', reason),
+                .addField('topic', topic),
             true
         );
 
@@ -231,7 +231,7 @@ export default class Private extends SubcommandCommand {
                         )
                         .addField(
                             'The right to transfer',
-                            'Staff reserve the right to transfer your session over to another member of staff for any given reason during your session.'
+                            'Staff reserve the right to transfer your session over to another member of staff for any given topic during your session.'
                         )
                 ]
             });

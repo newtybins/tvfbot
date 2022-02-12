@@ -20,7 +20,7 @@ model User {
 model PrivateVent {
   friendlyId String
   textId     String? @unique(map: "privatevents_channelid_uindex")
-  reason     String
+  topic      String
   userId     String  @unique(map: "privatevents_userid_uindex")
   voiceId    String? @unique(map: "privatevents_voiceid_uindex")
   Users      User    @relation("PrivateVentsToUsers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "privatevents_users_id_fk")
