@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
+import { SubCommandEntryMethod, SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
 import type { Args as SapphireArgs } from '@sapphire/framework';
 import type { GuildMember, Message as DiscordMessage } from 'discord.js';
 import title from 'title';
@@ -24,15 +24,17 @@ class SubcommandCommand extends SubCommandPluginCommand {
         this.subcommands = subcommands;
 
         subcommands.forEach(subcommand => {
+            const entry = new SubCommandEntryMethod({ input: subcommand.name });
+
             // @ts-ignore
             if (subcommand.default && !this.subCommands?.default)
                 // @ts-ignore
-                this.subCommands.default = { input: subcommand.name, output: subcommand.name };
+                this.subCommands.default = entry;
             else {
                 // @ts-ignore
                 this.subCommands.entries ??= [];
                 // @ts-ignore
-                this.subCommands.entries.push({ input: subcommand.name, output: subcommand.name });
+                this.subCommands.entries.push(entry);
             }
         });
     }
