@@ -34,7 +34,7 @@ abstract class Command extends SapphireCommand {
         super.onUnload();
     }
 
-    private get usage(): string {
+    public get usage(): string {
         let usage = `${this.name}`;
 
         this.args.forEach(argument => {

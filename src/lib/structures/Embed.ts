@@ -36,7 +36,7 @@ export default class Embed extends MessageEmbed {
                 this.setColor(tvfColour);
                 break;
             case 'error':
-                this.setColor(errorColour);
+                this.setColor(errorColour).setTitle('Woops!');
                 break;
             case 'success':
                 this.setColor(successColour);
@@ -54,7 +54,7 @@ export default class Embed extends MessageEmbed {
         // Set the author if it is possible
         if (author) {
             this.setAuthor({
-                name: author.nickname ?? author.user.username,
+                name: author.displayName,
                 iconURL: author.avatarURL()
             });
         }

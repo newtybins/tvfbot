@@ -9,9 +9,21 @@ datasource db {
 }
 
 model User {
-  id    String @id(map: "users_pk") @unique(map: "users_id_uindex")
-  level Int    @default(1)
-  xp    Int    @default(0)
+  id          String       @id(map: "users_pk") @unique(map: "users_id_uindex")
+  level       Int          @default(1)
+  xp          Int          @default(0)
+  PrivateVent PrivateVent? @relation("PrivateVentsToUsers")
 
   @@map("Users")
+}
+
+model PrivateVent {
+  friendlyId String
+  textId     String? @unique(map: "privatevents_channelid_uindex")
+  reason     String
+  userId     String  @unique(map: "privatevents_userid_uindex")
+  voiceId    String? @unique(map: "privatevents_voiceid_uindex")
+  Users      User    @relation("PrivateVentsToUsers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "privatevents_users_id_fk")
+
+  @@map("PrivateVents")
 }

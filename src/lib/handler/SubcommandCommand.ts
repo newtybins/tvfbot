@@ -14,7 +14,7 @@ class SubcommandCommand extends SubCommandPluginCommand {
     private subcommands: SubcommandCommand.Subcommand[];
 
     constructor(
-        context: SubcommandCommand.Context,
+        context: SubCommandPluginCommand.Context,
         { subcommands, ...options }: SubcommandCommand.Options
     ) {
         super(context, options);
@@ -47,31 +47,41 @@ class SubcommandCommand extends SubCommandPluginCommand {
         super.onUnload();
     }
 
-    private generateUsage(requestedBy: GuildMember): string[] {
-        let usages = this.subcommands.map(({ name, args, restrictedTo }) => {
-            let permissionToView = true;
+    public generateUsage(requestedBy: GuildMember): SubcommandCommand.Usage[] {
+        let usages = this.subcommands.map(
+            ({ name, args, restrictedTo, default: isDefault }): SubcommandCommand.Usage => {
+                let permissionToView = true;
 
-            if (restrictedTo?.length > 0) {
-                restrictedTo.forEach(role => {
-                    if (!requestedBy.roles.cache.has(role) && permissionToView)
-                        permissionToView = false;
-                });
+                if (restrictedTo?.length > 0) {
+                    restrictedTo.forEach(role => {
+                        if (!requestedBy.roles.cache.has(role) && permissionToView)
+                            permissionToView = false;
+                    });
+                }
+
+                if (permissionToView) {
+                    let usage = `${this.name} ${name}`;
+
+                    args?.forEach(argument => {
+                        usage += ` ${argument.required ? '<' : '['}${argument.name}${
+                            argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
+                        }${argument.required ? '>' : ']'}`;
+                    });
+
+                    return {
+                        subcommand: name,
+                        usage,
+                        default: isDefault ?? false
+                    };
+                } else {
+                    return {
+                        subcommand: null,
+                        usage: null,
+                        default: null
+                    };
+                }
             }
-
-            if (permissionToView) {
-                let usage = `${this.name} ${name}`;
-
-                args?.forEach(argument => {
-                    usage += ` ${argument.required ? '<' : '['}${argument.name}${
-                        argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
-                    }${argument.required ? '>' : ']'}`;
-                });
-
-                return usage;
-            } else {
-                return null;
-            }
-        });
+        );
 
         const defaultSubcommand = this.subcommands.find(subcommand => subcommand.default);
 
@@ -84,10 +94,20 @@ class SubcommandCommand extends SubCommandPluginCommand {
                 }${argument.required ? '>' : ']'}`;
             });
 
-            usages = [usage, ...usages];
+            usages = [
+                {
+                    subcommand: defaultSubcommand.name,
+                    usage,
+                    default: defaultSubcommand.default ?? false
+                },
+                ...usages
+            ];
         }
 
-        return this.client.utils.sortAlphabetically(usages.filter(u => u));
+        return this.client.utils.sortAlphabetically(
+            usages.filter(s => s),
+            'subcommand'
+        );
     }
 
     public generateHelpEmbed(message: SubcommandCommand.Message, prefix: string): Embed {
@@ -120,7 +140,7 @@ class SubcommandCommand extends SubCommandPluginCommand {
             .addField(
                 'Usage',
                 `\`\`\`${this.generateUsage(message.member)
-                    .map(usage => `${prefix}${usage}`)
+                    .map(usage => `${prefix}${usage.usage}`)
                     .join('\n')}\`\`\``
             );
 
@@ -139,11 +159,17 @@ namespace SubcommandCommand {
         restrictedTo?: string[];
     }
 
+    export interface Usage {
+        subcommand: string;
+        usage: string;
+        default: boolean;
+    }
+
     export type Options = SubCommandPluginCommand.Options & {
         subcommands?: Subcommand[];
     };
 
-    export type Context = SubCommandPluginCommand.Context;
+    export type Context = SubCommandPluginCommand.RunContext;
     export type Message = DiscordMessage;
     export type Args = SapphireArgs;
 
