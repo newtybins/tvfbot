@@ -15,8 +15,9 @@ abstract class Command extends SapphireCommand {
     public client: Client;
     public logger: Logger;
     private args: Command.Argument[];
+    private flags: Command.Flag[];
 
-    constructor(context: PieceContext, { args, ...options }: Command.Options) {
+    constructor(context: PieceContext, { args, flags, ...options }: Command.Options) {
         super(context, options);
 
         this.client = this.container.client;
@@ -40,7 +41,7 @@ abstract class Command extends SapphireCommand {
         this.args.forEach(argument => {
             usage += ` ${argument.required ? '<' : '['}${argument.name}${
                 argument.options?.length > 0 ? `=${argument.options.join('|')}` : ''
-            }${argument.required ? '>' : ']'}`;
+            }${argument.required ? '>' : ']'} ${this.flags.map(flag => `--${flag}`).join(' ')}`;
         });
 
         return usage;
@@ -67,8 +68,11 @@ namespace Command {
         options?: string[];
     }
 
+    export type Flag = string;
+
     export type Options = CommandOptions & {
         args?: Argument[];
+        flags?: Flag[];
     };
 
     export type Message = DiscordMessage;

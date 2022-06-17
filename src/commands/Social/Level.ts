@@ -5,7 +5,13 @@ import RankCard from '~structures/RankCard';
 
 @Command.Config({
     name: 'level',
-    description: "View a user's level!"
+    description: "View a user's level!",
+    args: [
+        {
+            name: '@user',
+            required: false
+        }
+    ]
 })
 export default class Level extends Command {
     public async messageRun(message: Command.Message, args: Command.Args) {

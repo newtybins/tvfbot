@@ -15,4 +15,8 @@ declare module '@sapphire/framework' {
     interface Command {
         generateHelpEmbed(message: Message, prefix: string): Embed;
     }
+
+    interface Preconditions {
+        DeveloperOnly: never;
+    }
 }

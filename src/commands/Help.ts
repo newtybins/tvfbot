@@ -38,6 +38,8 @@ export default class Help extends Command {
         let embed: Embed;
         let appendCommandList = !commandName;
 
+        console.log(commandName, this.commands);
+
         if (commandName) {
             const command = this.client.stores.get('commands').get(commandName);
 
@@ -56,6 +58,8 @@ export default class Help extends Command {
                 .setDescription(
                     `You can see a list of all of my commands below! If you would like to learn more about a specific one, you can find out more by running \`${context.commandPrefix}${context.commandName} <command>\``
                 );
+
+            appendCommandList = true;
         }
 
         if (appendCommandList) {
