@@ -18,7 +18,7 @@ export default class PrideChoice extends Listener<'interactionCreate'> {
         form.append('file', image, 'pfp.png');
 
         const { data: rendered } = await axios.post(
-            `https://api.pfp.lgbt/v5/image/static/circle/solid/${type}.${imageType}`,
+            `https://api.pfp.lgbt/v5/image/static/circle/gradient/${type}.${imageType}`,
             form,
             {
                 headers: form.getHeaders(),
