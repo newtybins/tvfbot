@@ -5,7 +5,6 @@ import { newtId, tvfId } from '~config';
 import fetchRoles from '~tvf/roles';
 import Utils from '~utils';
 import fetchChannels from '~tvf/channels';
-import fetchCategories from '~tvf/categories';
 
 class Client extends SapphireClient {
     public db = new PrismaClient();
@@ -17,7 +16,6 @@ class Client extends SapphireClient {
         server: null,
         roles: null,
         channels: null,
-        categories: null,
         newt: null
     };
 
@@ -51,7 +49,6 @@ class Client extends SapphireClient {
         this.tvf.server = await this.guilds.fetch(tvfId);
         this.tvf.roles = await fetchRoles(this.tvf.server);
         this.tvf.channels = await fetchChannels(this.tvf.server);
-        this.tvf.categories = await fetchCategories(this.tvf.server);
         this.tvf.newt = await this.tvf.server.members.fetch(newtId);
 
         return response;
@@ -63,7 +60,6 @@ namespace Client {
         server: Guild;
         roles: Awaited<ReturnType<typeof fetchRoles>>;
         channels: Awaited<ReturnType<typeof fetchChannels>>;
-        categories: Awaited<ReturnType<typeof fetchCategories>>;
         newt: GuildMember;
     }
 }
