@@ -10,6 +10,7 @@ declare module '@sapphire/framework' {
         production: boolean;
         tvf: Client.TVF;
         utils: Utils;
+        defaultPrefix: string;
     }
 
     interface Command {

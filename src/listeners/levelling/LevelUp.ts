@@ -65,7 +65,7 @@ export default class LevelUp extends Listener<typeof Listener.Events.Levelling.L
         }
 
         // Send the message
-        return await this.client.tvf.channels.arbour.levelUp.send({
+        return await this.client.tvf.channels.levelUp.send({
             content: member.toString(),
             embeds: [embed]
         });

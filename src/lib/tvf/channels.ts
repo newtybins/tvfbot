@@ -1,14 +1,20 @@
 import type { Guild, TextChannel } from 'discord.js';
 
 const fetchChannels = async (tvf: Guild) => {
-    return {
-        arbour: {
-            levelUp: (await tvf.channels.fetch('939611382167519275')) as TextChannel
-        },
-        staff: {
-            support: (await tvf.channels.fetch('761718388090863616')) as TextChannel
-        }
+    const channels = {
+        levelUp: '939611382167519275',
+        rules: '481124133606916096',
+        support: '761718388090863616',
+        meetTheStaff: '927981329675583541',
+        roles: '481131558296616961',
+        theWoods: '435894444584075265'
     };
+
+    for (const key in channels) {
+        channels[key] = (await tvf.channels.fetch(channels[key])) as TextChannel;
+    }
+
+    return channels as unknown as { [key in keyof typeof channels]: TextChannel };
 };
 
 export default fetchChannels;

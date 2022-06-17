@@ -1,19 +1,19 @@
-import type { Guild } from 'discord.js';
+import type { Guild, Role } from 'discord.js';
 
 const fetchRoles = async (tvf: Guild) => {
-    return {
-        staff: {
-            staff: await tvf.roles.fetch('452662935035052032'),
-            forestKeepers: await tvf.roles.fetch('435897654682320925'),
-            support: await tvf.roles.fetch('761713326597865483'),
-            admins: await tvf.roles.fetch('452553630105468957'),
-            heads: {
-                forestKeepers: await tvf.roles.fetch('761714520535334922'),
-                support: await tvf.roles.fetch('761714525161652224')
-            },
-            hackerbeing: await tvf.roles.fetch('462606587404615700')
-        }
+    const roles = {
+        staff: '452662935035052032',
+        forestKeepers: '435897654682320925',
+        support: '761713326597865483',
+        hackerbeing: '462606587404615700',
+        welcomeTeam: '499302826028302368'
     };
+
+    for (const key in roles) {
+        roles[key] = (await tvf.roles.fetch(roles[key])) as Role;
+    }
+
+    return roles as unknown as { [key in keyof typeof roles]: Role };
 };
 
 export default fetchRoles;

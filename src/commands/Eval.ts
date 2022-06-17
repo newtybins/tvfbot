@@ -64,11 +64,11 @@ export default class Eval extends Command {
 
         try {
             const hrStart = process.hrtime();
-            code = code.replace(/this\./g, 'command.');
+            if (runAsync) code = code.replace(/this\./g, 'command.');
 
             this.lastResult = await eval(
                 runAsync
-                    ? `const command = this; async function codeToRun() {${
+                    ? `const command = this; const msg = message; async function codeToRun() {${
                           code.includes('return') ? code : `${code}; return null;`
                       }}; codeToRun().then(res => { return { success: true, out: res }; }).catch(err => { return { success: false, out: err } })`
                     : code.replace('return', '')

@@ -11,6 +11,7 @@ class Client extends SapphireClient {
     public db = new PrismaClient();
     public production = process.env.NODE_ENV === 'production';
     public utils = new Utils(this);
+    public defaultPrefix: string;
 
     public tvf: Client.TVF = {
         server: null,
@@ -21,6 +22,8 @@ class Client extends SapphireClient {
     };
 
     constructor() {
+        const prefix = process.env.NODE_ENV === 'production' ? 'tvf ' : 'tvf beta ';
+
         super({
             intents: [
                 'GUILDS',
@@ -35,8 +38,10 @@ class Client extends SapphireClient {
             presence: {
                 status: 'idle'
             },
-            defaultPrefix: process.env.NODE_ENV === 'production' ? 'tvf ' : 'tvf beta '
+            defaultPrefix: prefix
         });
+
+        this.defaultPrefix = prefix;
     }
 
     public async login(token: string) {

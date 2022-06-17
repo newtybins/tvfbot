@@ -33,7 +33,8 @@ export const hour = 3600000;
 export const prideMenuId = 'pride-menu';
 
 export const emojis = {
-    confetti: '🎉'
+    confetti: '🎉',
+    wave: '👋'
 };
 
 export const timeouts: {

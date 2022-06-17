@@ -4,17 +4,6 @@ const rimraf = require('rimraf');
 const typescript = require('gulp-typescript');
 const uglify = require('gulp-uglify');
 const imagemin = require('gulp-imagemin');
-const colours = require('picocolors');
-const figures = require('figures');
-const dayjs = require('dayjs');
-
-const log = message => {
-    console.log(
-        `${colours.gray(`[${dayjs().format('hh:mm:ss A').toUpperCase()}] [gulp] ›`)} ${colours.red(
-            `${figures.play}  ${colours.underline(colours.bold('gulp'))}`
-        )}   ${message}`
-    );
-};
 
 // Clean the old build directory
 gulp.task('clean', () => {
