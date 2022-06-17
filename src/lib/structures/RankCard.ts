@@ -341,9 +341,13 @@ class RankCard {
 
         // Draw the user's tag
         if (this._data.tag.display) {
-            const tag = `${this._data.tag.username}#${this._data.tag.discriminator}`;
+            let tag = this._data.tag.username.split(' ');
             ctx.font = `bold ${this._data.tag.fontSize}px ${fonts.bold}`;
             ctx.fillStyle = this._data.tag.fontColour;
+
+            if (tag.length > 2) tag = `${tag[0]} ${tag[1]}...`;
+            else if (tag.length === 2) tag = `${tag[0]} ${tag[1]}`;
+            else tag = tag[0];
 
             ctx.fillText(tag, this._data.progress.x + 10, this._data.progress.y);
         }
@@ -549,8 +553,7 @@ class RankCard {
                 `Rank ${abbreviate(this._data.rank.value)}`,
                 this._data.progress.x +
                     this._data.progress.width -
-                    ctx.measureText(progressText).width -
-                    75,
+                    ctx.measureText(progressText).width,
                 this._data.progress.y - 75
             );
         }

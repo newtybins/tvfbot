@@ -51,36 +51,60 @@ const splitMessage = (
     flags: ['noReturn']
 })
 export default class Eval extends Command {
-    public hrStart: [number, number] | undefined;
-    public lastResult: any = null;
+    private hrStart: [number, number] | undefined;
+    private lastResult: any = null;
     private readonly _sensitivePattern!: any;
 
     public async messageRun(message: Command.Message, args: Command.Args) {
-        const noReturn = await args.getFlags('noReturn', 'nr');
-        const code = await args.rest('string');
+        let shouldReturn = !args.getFlags('noReturn', 'nr');
+        let code = await args.rest('string');
+        const runAsync = code.includes('await') || code.includes('async');
 
-        let hrDiff;
+        let hrDiff: [number, number];
+
         try {
             const hrStart = process.hrtime();
-            this.lastResult = eval(code);
+            code = code.replace(/this\./g, 'command.');
+
+            this.lastResult = await eval(
+                runAsync
+                    ? `const command = this; async function codeToRun() {${
+                          code.includes('return') ? code : `${code}; return null;`
+                      }}; codeToRun().then(res => { return { success: true, out: res }; }).catch(err => { return { success: false, out: err } })`
+                    : code.replace('return', '')
+            );
+
+            // Ensure that errors are caught and that if the returned value does not exist, nothing is returned
+            if (runAsync) {
+                if (!this.lastResult['success']) throw new Error(this.lastResult['out']);
+                if (!this.lastResult['out']) shouldReturn = false;
+            } else {
+                if (!this.lastResult) shouldReturn = false;
+            }
+
             hrDiff = process.hrtime(hrStart);
         } catch (error) {
             return message.channel.send(`Error while evaluating: \`${error}\``);
         }
 
         this.hrStart = process.hrtime();
-        const result = this._result(this.lastResult, hrDiff, code);
+        const result = this._result(
+            runAsync ? this.lastResult['out'] : this.lastResult,
+            hrDiff,
+            code
+        );
 
-        if (noReturn)
+        if (!shouldReturn)
             return message.channel.send(
                 `*Executed in **${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${
                     hrDiff[1] / 1000000
                 }ms.***`
             );
-        if (Array.isArray(result))
-            return result.map(
-                async (res): Promise<Message | Message[]> => message.channel.send(res)
-            );
+
+        if (Array.isArray(result)) {
+            return result.map(async res => message.channel.send(res));
+        }
+
         return message.channel.send(result);
     }
 

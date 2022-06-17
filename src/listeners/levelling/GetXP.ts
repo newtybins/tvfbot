@@ -17,6 +17,9 @@ export default class GetXP extends Listener<typeof Listener.Events.Levelling.Get
             update: {}
         });
 
+        const xpForLevel = this.client.utils.calculateXp(user.level);
+        if (user.xp < xpForLevel) user.xp = xpForLevel;
+
         const xp = user.xp + Math.floor(Math.random() * 25) + 15;
         let level = user.level;
         const xpRequiredForNextLevel = this.client.utils.calculateXp(level + 1);
