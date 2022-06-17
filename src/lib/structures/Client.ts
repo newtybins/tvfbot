@@ -10,7 +10,7 @@ import fetchCategories from '~tvf/categories';
 class Client extends SapphireClient {
     public db = new PrismaClient();
     public production = process.env.NODE_ENV === 'production';
-    public utils = new Utils();
+    public utils = new Utils(this);
 
     public tvf: Client.TVF = {
         server: null,
@@ -46,7 +46,7 @@ class Client extends SapphireClient {
         this.tvf.server = await this.guilds.fetch(tvfId);
         this.tvf.roles = await fetchRoles(this.tvf.server);
         this.tvf.channels = await fetchChannels(this.tvf.server);
-        this.tvf.categories = await fetchCategories(this.tvf.server)
+        this.tvf.categories = await fetchCategories(this.tvf.server);
         this.tvf.newt = await this.tvf.server.members.fetch(newtId);
 
         return response;
@@ -58,7 +58,7 @@ namespace Client {
         server: Guild;
         roles: Awaited<ReturnType<typeof fetchRoles>>;
         channels: Awaited<ReturnType<typeof fetchChannels>>;
-        categories: Awaited<ReturnType<typeof fetchCategories>>
+        categories: Awaited<ReturnType<typeof fetchCategories>>;
         newt: GuildMember;
     }
 }

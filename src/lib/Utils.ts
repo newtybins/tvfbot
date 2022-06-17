@@ -1,7 +1,15 @@
 import type { Message } from 'discord.js';
 import humanId from 'human-id';
+import { LevelReward, levelRewards } from '~config';
+import Client from '~structures/Client';
 
 export default class Utils {
+    private client: Client;
+
+    constructor(client: Client) {
+        this.client = client;
+    }
+
     public get id() {
         return humanId({
             separator: '-',
@@ -14,6 +22,24 @@ export default class Utils {
      */
     public calculateXp(level: number): number {
         return (625 * level ** 2) / 9;
+    }
+
+    /**
+     * Finds the level reward for a given level!
+     * @param {number} level
+     */
+    public findLevelReward(level: number): LevelReward {
+        const levelIndex = levelRewards.findIndex(l =>
+            level % 2 === 0 ? l.level === level : l.level === level - 1
+        );
+
+        return levelRewards[levelIndex];
+    }
+
+    public async findLevelRewardName(reward: LevelReward) {
+        const role = await this.client.tvf.server.roles.fetch(reward.roleId);
+
+        return role.name;
     }
 
     /**

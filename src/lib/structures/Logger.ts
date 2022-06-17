@@ -13,7 +13,8 @@ const glyphNames: {
     info: 'info',
     warn: 'warning',
     error: 'cross',
-    loader: 'nodejs'
+    loader: 'nodejs',
+    private: 'heart'
 };
 
 const extractNumbers = /[^0-9]/g;
@@ -98,6 +99,10 @@ export default class Logger {
 
     public warn(message: string, ...placeholders: any[]) {
         this.log('warn', 'yellow', message, placeholders);
+    }
+
+    public privateVent(message: string, ...placeholders: any[]) {
+        this.log('private', 'magenta', message, placeholders);
     }
 
     public error(message: string | Error, ...placeholders: any[]) {

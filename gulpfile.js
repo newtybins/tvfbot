@@ -23,22 +23,25 @@ gulp.task('clean', () => {
     });
 });
 
-// Build the typescript files
-gulp.task('build', () => {
+// Compile the typescript files
+gulp.task('compile', () => {
     const tsc = typescript.createProject('tsconfig.json', {
         typescript: require('ttypescript')
     });
 
-    return gulp
-        .src('src/**/*.ts')
-        .pipe(tsc())
-        .pipe(uglify({ mangle: { toplevel: true } }))
-        .pipe(gulp.dest('build'));
+    return gulp.src('src/**/*.ts').pipe(tsc()).pipe(gulp.dest('build'));
 });
+
+// Uglify the build
+gulp.task('uglify', () =>
+    gulp
+        .src('build/**/*.js')
+        .pipe(uglify({ mangle: { toplevel: true } }))
+        .pipe(gulp.dest('build'))
+);
 
 // Optimise image files
-gulp.task('optimise', () => {
-    return gulp.src('assets/**/*.png').pipe(imagemin()).pipe(gulp.dest('assets'));
-});
+gulp.task('optimise', () => gulp.src('assets/**/*.png').pipe(imagemin()).pipe(gulp.dest('assets')));
 
-gulp.task('default', gulp.series('clean', 'build'));
+gulp.task('build:dev', gulp.series('clean', 'compile'));
+gulp.task('build:prod', gulp.series('build:dev', 'uglify', 'optimise'));

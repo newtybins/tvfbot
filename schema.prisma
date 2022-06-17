@@ -1,0 +1,25 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id      String   @id(map: "users_pk") @unique(map: "users_id_uindex")
+  level   Int      @default(1)
+  xp      Int      @default(0)
+  Private Private?
+}
+
+model Private {
+  friendlyId String  @unique(map: "privatevents_friendlyid_uindex")
+  textId     String? @unique(map: "privatevents_channelid_uindex")
+  topic      String
+  userId     String  @unique(map: "privatevents_userid_uindex")
+  voiceId    String? @unique(map: "privatevents_voiceid_uindex")
+  User       User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "privatevents_users_id_fk")
+}
