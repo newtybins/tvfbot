@@ -38,8 +38,6 @@ export default class Help extends Command {
         let embed: Embed;
         let appendCommandList = !commandName;
 
-        console.log(commandName, this.commands);
-
         if (commandName) {
             const command = this.client.stores.get('commands').get(commandName);
 
@@ -63,7 +61,7 @@ export default class Help extends Command {
         }
 
         if (appendCommandList) {
-            const categories = this.client.utils.sortAlphabetically(Object.keys(this.commands));
+            const categories = Object.keys(this.commands).sort();
 
             categories.forEach(category => {
                 const commands = this.commands[category];

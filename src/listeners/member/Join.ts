@@ -7,7 +7,7 @@ import Embed from '~structures/Embed';
 @Listener.Config({
     name: 'Member Joined',
     event: Listener.Events.GuildMemberAdd,
-    production: false
+    production: true
 })
 export default class GetXP extends Listener<typeof Listener.Events.GuildMemberAdd> {
     public async run(member: GuildMember) {

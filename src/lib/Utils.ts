@@ -43,16 +43,6 @@ export default class Utils {
     }
 
     /**
-     * Sort an array of strings alphabetically
-     */
-    public sortAlphabetically<T>(input: T[], property?: T extends string ? any : keyof T): T[] {
-        if (input[0] instanceof String) {
-            // @ts-ignore
-            return input.sort((a: string, b: string) => a.localeCompare(b));
-        } else return input.sort((a: any, b: any) => a[property].localeCompare(b[property]));
-    }
-
-    /**
      * Make a message delete itself after x seconds
      */
     public deleteMessageAfter(message: Message, seconds: number = 2) {
