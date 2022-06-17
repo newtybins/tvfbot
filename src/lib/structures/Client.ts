@@ -36,7 +36,9 @@ class Client extends SapphireClient {
             presence: {
                 status: 'idle'
             },
-            defaultPrefix: prefix
+            defaultPrefix: prefix,
+            caseInsensitiveCommands: true,
+            caseInsensitivePrefixes: true
         });
 
         this.defaultPrefix = prefix;
