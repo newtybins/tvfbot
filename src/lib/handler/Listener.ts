@@ -64,7 +64,7 @@ namespace Listener {
 
     export const Config = (options: Options) => ApplyOptions<Options>(options);
     export const Events = {
-        Client: SapphireEvents,
+        ...SapphireEvents,
         Levelling: {
             GetXp: 'getXp',
             LevelUp: 'levelUp'

@@ -30,6 +30,7 @@ export const errorColour: Colour = '#ff6961';
 export const successColour: Colour = '#04ac84';
 export const newtId = '326767126406889473';
 export const hour = 3600000;
+export const prideMenuId = 'pride-menu';
 
 export const emojis = {
     confetti: '🎉'

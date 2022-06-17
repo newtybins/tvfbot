@@ -5,13 +5,15 @@
         "outDir": "build",
         "esModuleInterop": true,
         "baseUrl": "./src",
+        "skipLibCheck": true,
         "paths": {
             "~structures/*": ["./lib/structures/*"],
             "~handler/*": ["./lib/handler/*"],
             "~config": ["./config"],
             "~utils": ["./lib/Utils"],
             "~emitters": ["./lib/emitters/index"],
-            "~tvf/*": ["./lib/tvf/*"]
+            "~tvf/*": ["./lib/tvf/*"],
+            "~commands/*": ["./commands/*"]
         },
         "plugins": [{ "transform": "ts-transform-paths" }],
         "experimentalDecorators": true

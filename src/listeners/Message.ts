@@ -5,9 +5,9 @@ import Listener from '~handler/Listener';
 
 @Listener.Config({
     name: 'Message',
-    event: Listener.Events.Client.MessageCreate
+    event: Listener.Events.MessageCreate
 })
-export default class GetXP extends Listener<typeof Listener.Events.Client.MessageCreate> {
+export default class GetXP extends Listener<typeof Listener.Events.MessageCreate> {
     private xpCooldown: Set<string> = new Set<string>();
 
     public async run(message: Message) {
