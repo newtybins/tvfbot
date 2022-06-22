@@ -35,12 +35,7 @@ const choices = {
     Polysexual: 'polysexual',
     Polyamorous: 'poly',
     Transgender: 'trans',
-    Xenogender: 'xenogender',
-    MLM: 'newmlm',
-    Unlabeled: 'unlabeled',
-    WLW: 'wlw',
-    Queer: 'queer',
-    NBLM: 'nblm'
+    Xenogender: 'xenogender'
 } as const;
 
 const styles = ['gradient', 'solid', 'dashed', 'overlay'] as const;
