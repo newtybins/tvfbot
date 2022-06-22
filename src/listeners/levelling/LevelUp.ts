@@ -22,7 +22,7 @@ export default class LevelUp extends Listener<typeof Listener.Events.Levelling.L
         const levelRewardName = member.guild.roles.cache.get(levelReward.roleId).name;
 
         // Prepare the message
-        const embed = new Embed()
+        const embed = new Embed('normal', member)
             .setTitle('Level Up!')
             .setThumbnail(member.avatarURL())
             .setDescription(
