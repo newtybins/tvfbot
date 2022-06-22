@@ -57,7 +57,7 @@ export default class Eval extends Command {
 
     public async messageRun(message: Command.Message, args: Command.Args) {
         let shouldReturn = !args.getFlags('noReturn', 'nr');
-        let code = await args.rest('string');
+        let { value: code } = await args.restResult('string');
         const runAsync = code.includes('await') || code.includes('async');
 
         let hrDiff: [number, number];

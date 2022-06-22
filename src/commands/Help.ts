@@ -55,7 +55,7 @@ export default class Help extends Command {
         args: Command.Args,
         context: Command.Context
     ) {
-        const commandName = await args.rest('string');
+        const { value: commandName } = await args.restResult('string');
         let embed: Embed;
         let appendCommandList = !commandName;
 

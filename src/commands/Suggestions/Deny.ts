@@ -29,7 +29,7 @@ export default class SuggestionDenied extends Command {
                 suggestion.messageId
             );
             const suggestionAuthor = await this.client.users.fetch(suggestion.authorId);
-            const comment = await args.rest('string');
+            const { value: comment } = await args.restResult('string');
 
             const newEmbed = suggestionMessage.embeds[0]
                 .setTitle(`Suggestion by ${suggestionAuthor.username} has been denied!`)

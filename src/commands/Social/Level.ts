@@ -15,7 +15,7 @@ import RankCard from '~structures/RankCard';
 })
 export default class Level extends Command {
     public async messageRun(message: Command.Message, args: Command.Args) {
-        const memberToCheck = (await args.rest('member')) ?? message.member;
+        const memberToCheck = (await args.restResult('member')).value ?? message.member;
 
         const allUsers = (await this.client.db.user.findMany({ orderBy: { xp: 'desc' } })).filter(
             async user => (await this.client.tvf.server.members.list()).has(user.id)
