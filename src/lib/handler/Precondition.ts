@@ -9,6 +9,7 @@ import Client from '~structures/Client';
 import Logger from '~structures/Logger';
 import title from 'title';
 import { Message as DiscordMessage } from 'discord.js';
+import TVFCommand from '~handler/Command';
 
 abstract class Precondition extends SapphirePrecondition {
     public client: Client;
@@ -61,6 +62,7 @@ namespace Precondition {
     export type Context = PieceContext;
     export type Message = DiscordMessage;
     export type Result = PreconditionResult;
+    export type Command = TVFCommand;
 
     export const Config = (options: Options) => ApplyOptions<Options>(options);
 }

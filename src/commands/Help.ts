@@ -1,8 +1,15 @@
+import { newtId } from '~config';
 import Command from '~handler/Command';
 import Embed from '~structures/Embed';
 
+enum CommandPermisions {
+    None,
+    ForestKeeper,
+    Developer
+}
+
 interface Commands {
-    [category: string]: string[];
+    [category: string]: { name: string; access: CommandPermisions[] }[];
 }
 
 @Command.Config({
@@ -23,7 +30,21 @@ export default class Help extends Command {
             category ??= 'Core';
 
             if (!commands[category]) commands[category] = [];
-            if (!commands[category].includes(name)) commands[category].push(name);
+            if (!commands[category].find(o => o.name === name)) {
+                const command = commandStore.get(name);
+                let permissions = [CommandPermisions.None];
+
+                const preconditions = command.preconditions.entries.map(
+                    entry => entry['name'] as string
+                );
+
+                if (preconditions.includes('DeveloperOnly'))
+                    permissions = [CommandPermisions.Developer];
+                else if (preconditions.includes('ForestKeeperOnly'))
+                    permissions = [CommandPermisions.Developer, CommandPermisions.ForestKeeper];
+
+                commands[category].push({ name, access: permissions });
+            }
         });
 
         return commands;
@@ -62,9 +83,16 @@ export default class Help extends Command {
 
         if (appendCommandList) {
             const categories = Object.keys(this.commands).sort();
+            let permission = CommandPermisions.None;
+
+            if (message.author.id === newtId) permission = CommandPermisions.Developer;
+            else if (message.member.roles.cache.has(this.client.tvf.roles.forestKeepers.id))
+                permission = CommandPermisions.ForestKeeper;
 
             categories.forEach(category => {
-                const commands = this.commands[category];
+                const commands = this.commands[category].filter(command =>
+                    command.access.includes(permission)
+                );
                 embed.addField(category, `\`\`\`${commands.join(', ')}\`\`\``);
             });
         }

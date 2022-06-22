@@ -10,6 +10,7 @@ import Client from '~structures/Client';
 import Logger from '~structures/Logger';
 import title from 'title';
 import Embed from '~structures/Embed';
+import BotCommandsOnly from 'preconditions/BotCommandsOnly';
 
 abstract class Command extends SapphireCommand {
     public client: Client;
@@ -18,6 +19,10 @@ abstract class Command extends SapphireCommand {
     private flags: Command.Flag[];
 
     constructor(context: PieceContext, { args, flags, ...options }: Command.Options) {
+        if (!options.preconditions) options.preconditions = [];
+        // @ts-ignore
+        options.preconditions.push({ name: 'BotCommandsOnly', context });
+
         super(context, options);
 
         this.client = this.container.client;
@@ -73,6 +78,8 @@ namespace Command {
     export type Options = CommandOptions & {
         args?: Argument[];
         flags?: Flag[];
+        developerOnly?: boolean;
+        fkOnly?: boolean;
     };
 
     export type Message = DiscordMessage;

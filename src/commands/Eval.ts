@@ -1,7 +1,7 @@
 import Command from '~handler/Command';
 import util from 'util';
 import { stripIndents } from 'common-tags';
-import { Message, Util } from 'discord.js';
+import { Util } from 'discord.js';
 
 const NL = '!!NL!!';
 const NL_PATTERN = new RegExp(NL, 'g');
@@ -41,7 +41,7 @@ const splitMessage = (
 @Command.Config({
     name: 'eval',
     description: 'Allows newt to evaluate code without having to make any changes to the bot!',
-    preconditions: ['DeveloperOnly'],
+    developerOnly: true,
     args: [
         {
             name: 'code',

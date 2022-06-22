@@ -1,7 +1,7 @@
-import { GuildMember, MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import { GuildMember, MessageEmbed, MessageEmbedOptions, User } from 'discord.js';
 import { REST as RESTClient } from '@discordjs/rest';
 import { Routes, APIEmbed, APIGuild, APIUser } from 'discord-api-types/v9';
-import { discord, errorColour, successColour, tvfColour, tvfId } from '~config';
+import { colours, discord, tvfId } from '~config';
 
 const rest = new RESTClient();
 rest.setToken(discord.token);
@@ -25,7 +25,7 @@ type EmbedType = 'normal' | 'success' | 'error';
 export default class Embed extends MessageEmbed {
     constructor(
         type: EmbedType = 'normal',
-        author?: GuildMember,
+        author?: GuildMember | User,
         data?: MessageEmbed | MessageEmbedOptions | APIEmbed
     ) {
         super(data);
@@ -33,13 +33,13 @@ export default class Embed extends MessageEmbed {
         // Update the colour
         switch (type) {
             case 'normal':
-                this.setColor(tvfColour);
+                this.setColor(colours.tvf);
                 break;
             case 'error':
-                this.setColor(errorColour).setTitle('Woops!');
+                this.setColor(colours.error).setTitle('Woops!');
                 break;
             case 'success':
-                this.setColor(successColour);
+                this.setColor(colours.success);
                 break;
         }
 
@@ -54,7 +54,10 @@ export default class Embed extends MessageEmbed {
         // Set the author if it is possible
         if (author) {
             this.setAuthor({
-                name: author.displayName,
+                name:
+                    author instanceof GuildMember
+                        ? author.displayName ?? author.user.username
+                        : author.username,
                 iconURL: author.avatarURL()
             });
         }

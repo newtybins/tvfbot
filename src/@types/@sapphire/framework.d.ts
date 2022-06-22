@@ -20,5 +20,6 @@ declare module '@sapphire/framework' {
     interface Preconditions {
         DeveloperOnly: never;
         ForestKeeperOnly: never;
+        BotCommandsOnly: never;
     }
 }

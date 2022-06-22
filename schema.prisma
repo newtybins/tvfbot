@@ -9,7 +9,18 @@ datasource db {
 }
 
 model User {
-  id    String @id(map: "user_pk") @unique(map: "user_id_uindex")
-  level Int    @default(1)
-  xp    Int    @default(0)
+  id         String       @id(map: "user_pk") @unique(map: "user_id_uindex")
+  level      Int          @default(1)
+  xp         Int          @default(0)
+  Suggestion Suggestion[]
+}
+
+model Suggestion {
+  suggestionId Int     @id(map: "suggestion_pk") @unique(map: "suggestion_suggestionid_uindex") @default(autoincrement())
+  authorId     String
+  state        Int?    @default(0)
+  content      String
+  messageId    String  @unique(map: "suggestion_messageid_uindex")
+  comment      String?
+  User         User    @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "suggestion_user_id_fk")
 }

@@ -1,10 +1,8 @@
 import path from 'path';
 import dotenv from 'dotenv';
+import { ColorResolvable } from 'discord.js';
 
 dotenv.config();
-
-// Utility types
-type Colour = `#${string}`;
 
 export interface LevelReward {
     level: number;
@@ -25,16 +23,40 @@ export const discord = {
 
 export const breathingGif = 'https://media.giphy.com/media/krP2NRkLqnKEg/giphy.gif';
 export const tvfId = '435894444101861408';
-export const tvfColour: Colour = '#16c3b3';
-export const errorColour: Colour = '#ff6961';
-export const successColour: Colour = '#04ac84';
 export const newtId = '326767126406889473';
 export const hour = 3600000;
 export const prideMenuId = 'pride-menu';
+export const blank = '\u0020';
+
+export const colours = {
+    tvf: '#16c3b3' as ColorResolvable,
+    error: '#ff6961' as ColorResolvable,
+    success: '#04ac84' as ColorResolvable,
+    white: '#ffffff' as ColorResolvable,
+    yellow: '#FFBF00' as ColorResolvable
+};
 
 export const emojis = {
     confetti: '🎉',
-    wave: '👋'
+    wave: '👋',
+    upvote: '<a:upvote:760820779344068609>',
+    downvote: '<a:downvote:760820793507971093>'
+};
+
+enum SuggestionStates {
+    Pending,
+    Approved,
+    Denied,
+    Considered
+}
+
+export { SuggestionStates };
+
+export const preconditionMessages = {
+    ForestKeeperOnly: 'fk',
+    DeveloperOnly: 'dev',
+    BotCommandsOnly: 'bot',
+    VentingChannels: 'vent'
 };
 
 export const timeouts: {

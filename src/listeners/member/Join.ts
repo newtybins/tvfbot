@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import type { GuildMember } from 'discord.js';
-import { emojis, tvfColour } from '~config';
+import { emojis } from '~config';
 import Listener from '~handler/Listener';
 import Embed from '~structures/Embed';
 
@@ -36,7 +36,6 @@ export default class GetXP extends Listener<typeof Listener.Events.GuildMemberAd
                 .setDescription(
                     `Welcome to TVF! We are a relatively large venting server that have been operating since the 17th April 2018, and we want to try our best to make you feel right at home! <3`
                 )
-                .setColor(tvfColour)
                 .setThumbnail(this.client.tvf.server.iconURL())
                 .addField(
                     "I'm in... so now what?",
@@ -78,7 +77,7 @@ export default class GetXP extends Listener<typeof Listener.Events.GuildMemberAd
         }
 
         // Welcome the user to the server
-        const welcome = new Embed().setThumbnail(member.user.avatarURL()).setColor(tvfColour)
+        const welcome = new Embed().setThumbnail(member.user.avatarURL())
             .setDescription(stripIndents`
 		This may be a somewhat large server, but we can certainly make you feel at home - that's what our **Welcome Team** is for!
 		**First of all, check out ${this.client.tvf.channels.rules.toString()} as it contains much of what you need to know, and ${this.client.tvf.channels.roles.toString()}, which you can self-assign.**

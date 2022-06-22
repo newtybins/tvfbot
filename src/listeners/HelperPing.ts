@@ -1,6 +1,4 @@
 import type { Message } from 'discord.js';
-import { timeouts, tvfColour } from '~config';
-import emitters from '~emitters';
 import Listener from '~handler/Listener';
 import Embed from '~structures/Embed';
 
@@ -13,7 +11,6 @@ export default class HelperPing extends Listener<typeof Listener.Events.MessageC
     public async run(message: Message) {
         if (message.content.includes(this.client.tvf.roles.helper.toString())) {
             const helperEmbed = new Embed()
-                .setColor(tvfColour)
                 .setThumbnail(this.client.tvf.server.iconURL())
                 .setTitle(`${message.author.username} needs help!`)
                 .setDescription(`[Jump to the message.](${message.url})`)

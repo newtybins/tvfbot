@@ -41,7 +41,7 @@ const choices = {
     WLW: 'wlw',
     Queer: 'queer',
     NBLM: 'nblm'
-};
+} as const;
 
 const styles = ['gradient', 'solid', 'dashed', 'overlay'] as const;
 
@@ -112,7 +112,13 @@ export default class Pride extends Command {
 
             const image = message.author.avatarURL({ size: 512, dynamic: true, format: 'png' });
             const [format] = image.split('.')[image.split('.').length - 1].split('?');
-            const renderedImage = await this.generatePfp(flag, image, format, style, transparency);
+            const renderedImage = await this.generatePfp(
+                flag as Flag,
+                image,
+                format,
+                style,
+                transparency
+            );
             const attachment = new MessageAttachment(renderedImage, `pride.${format}`);
 
             await response.edit({
