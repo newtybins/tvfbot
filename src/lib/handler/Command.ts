@@ -10,7 +10,6 @@ import Client from '~structures/Client';
 import Logger from '~structures/Logger';
 import title from 'title';
 import Embed from '~structures/Embed';
-import BotCommandsOnly from 'preconditions/BotCommandsOnly';
 
 abstract class Command extends SapphireCommand {
     public client: Client;
@@ -18,10 +17,17 @@ abstract class Command extends SapphireCommand {
     private args: Command.Argument[];
     private flags: Command.Flag[];
 
-    constructor(context: PieceContext, { args, flags, ...options }: Command.Options) {
+    constructor(
+        context: PieceContext,
+        { args, flags, developerOnly, ...options }: Command.Options
+    ) {
         if (!options.preconditions) options.preconditions = [];
+
         // @ts-ignore
         options.preconditions.push({ name: 'BotCommandsOnly', context });
+
+        // @ts-ignore
+        if (developerOnly) options.preconditions.push({ name: 'DeveloperOnly', context });
 
         super(context, options);
 
