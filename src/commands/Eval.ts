@@ -41,7 +41,7 @@ const splitMessage = (
 @Command.Config({
     name: 'eval',
     description: 'Allows newt to evaluate code without having to make any changes to the bot!',
-    developerOnly: true,
+    preconditions: ['DeveloperOnly'],
     args: [
         {
             name: 'code',

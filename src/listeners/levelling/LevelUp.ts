@@ -26,7 +26,7 @@ export default class LevelUp extends Listener<typeof Listener.Events.Levelling.L
             .setTitle('Level Up!')
             .setThumbnail(member.avatarURL())
             .setDescription(
-                `Congraulations, ${member.displayName}! Your magical ability has advanced to **Level ${level}**!`
+                `Congratulations, ${member.displayName}! Your magical ability has advanced to **Level ${level}**!`
             );
 
         if (level % 2 === 0) {
