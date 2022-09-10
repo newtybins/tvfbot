@@ -35,7 +35,7 @@ export default class SuggestionApproved extends Command {
                 .setTitle(`Suggestion by ${suggestionAuthor.username} has been approved!`)
                 .setDescription(suggestion.content)
                 .addField('Comment from the staff!', comment)
-                .setColor(colours.error);
+                .setColor(colours.success);
 
             await suggestionMessage.edit({
                 embeds: [newEmbed]
